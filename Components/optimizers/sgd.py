@@ -6,5 +6,5 @@ class SGD(Optimizer):
     def __init__(self, data_shape):
         super().__init__(data_shape)
     
-    def update(self, data_deriv):
+    def step(self, data_deriv):
         return data_deriv

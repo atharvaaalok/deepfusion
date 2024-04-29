@@ -7,5 +7,5 @@ class Optimizer:
         self.data_shape = data_shape
     
     @abstractmethod
-    def update(self, data_deriv):
+    def step(self, data_deriv):
         pass
