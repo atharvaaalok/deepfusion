@@ -15,3 +15,6 @@ def get_optimizer(data_shape, optimizer_details):
 _optimizers_dict = {
     'SGD': SGD,
 }
+
+
+DEFAULT_OPTIMIZER_DETAILS = {'optimizer_name': 'SGD', 'hyperparameters': {}}
