@@ -80,5 +80,6 @@ class Module(ABC):
     
 
     def set_learning_rate(self, learning_rate):
+        self.learning_rate = learning_rate
         for parameter in self.parameter_list:
             parameter.set_learning_rate(learning_rate)
