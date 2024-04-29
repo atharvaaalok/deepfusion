@@ -1,11 +1,11 @@
 import numpy as np
 
 from .regularizers import Regularizer
-from ..optimizers import get_optimizer
+from ..optimizers import get_optimizer, DEFAULT_OPTIMIZER_DETAILS
 
 class Data:
 
-    def __init__(self, ID, shape, val = None, is_frozen = True, optimizer_details = None, learning_rate = 1e-6, is_regularized = False, regularizer_details = None):
+    def __init__(self, ID, shape, val = None, is_frozen = True, optimizer_details = DEFAULT_OPTIMIZER_DETAILS, learning_rate = 1e-6, is_regularized = False, regularizer_details = None):
         self.ID = ID
 
         self.shape = shape
@@ -14,9 +14,7 @@ class Data:
 
         self.is_frozen = is_frozen
 
-        if not is_frozen and optimizer_details is None:
-            raise ValueError('If Data is not frozen, optimizer details must be provided.')
-        self.optimizer = get_optimizer(shape, optimizer_details) if optimizer_details is not None else None
+        self.optimizer = get_optimizer(shape, optimizer_details) if not is_frozen else None
 
         self.learning_rate = learning_rate
 
@@ -38,7 +36,7 @@ class Data:
         self.optimizer = None
 
 
-    def unfreeze(self, optimizer_details):
+    def unfreeze(self, optimizer_details = DEFAULT_OPTIMIZER_DETAILS):
         self.is_frozen = False
         self.optimizer = get_optimizer(self.shape, optimizer_details)
 
