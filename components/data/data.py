@@ -28,7 +28,9 @@ class Data:
     
     def update(self):
         if not self.is_frozen:
-            self.val -= self.learning_rate * self.optimizer.step(self.deriv)
+            optimizer_step = self.optimizer.step(self.deriv)
+            regularizer_step = self.regularizer.reg_fn_deriv(self.val) if self.is_regularized else 0
+            self.val -= self.learning_rate * (optimizer_step + self.regularizer.reg_strength * regularizer_step)
 
 
     def freeze(self):
