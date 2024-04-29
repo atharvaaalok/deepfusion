@@ -10,7 +10,7 @@ class Data:
 
         self.shape = shape
         self.val = np.zeros(shape) if val is None else val
-        self.deriv = np.zeros(shape)
+        self.deriv = np.zeros(1)
 
         self.is_frozen = is_frozen
 
@@ -42,7 +42,7 @@ class Data:
 
 
     def clear_grads(self):
-        self.deriv = np.zeros(self.shape)
+        self.deriv = np.zeros(1)
 
 
     def set_regularization(self, regularizer_details):
