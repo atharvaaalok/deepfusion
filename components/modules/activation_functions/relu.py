@@ -9,8 +9,8 @@ class Relu(Module):
     is_regularizable = False
 
 
-    def __init__(self, ID, inputs, output, learning_rate = 1e-6):
-        super().__init__(ID, inputs, output, learning_rate = learning_rate)
+    def __init__(self, ID, inputs, output):
+        super().__init__(ID, inputs, output)
     
 
     def forward(self):
