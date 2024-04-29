@@ -24,3 +24,31 @@ class Data:
         if is_regularized and regularizer_details is None:
             raise ValueError('If Data is regularized, regularizer details must be provided.')
         self.regularizer = Regularizer(regularizer_details) if regularizer_details is not None else None
+    
+    
+    def update(self):
+        if not self.is_frozen:
+            self.val -= self.learning_rate * self.optimizer.step(self.deriv)
+
+
+    def freeze(self):
+        self.is_frozen = True
+        self.optimizer = None
+
+
+    def unfreeze(self, optimizer_details):
+        self.is_frozen = False
+        self.optimizer = get_optimizer(self.shape, optimizer_details)
+
+
+    def clear_grads(self):
+        self.deriv = np.zeros(self.shape)
+
+
+    def set_regularization(self, regularizer_details):
+        self.is_regularized = True
+        self.regularizer = Regularizer(regularizer_details)
+
+
+    def set_learning_rate(self, learning_rate):
+        self.learning_rate = learning_rate
