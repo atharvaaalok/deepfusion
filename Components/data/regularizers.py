@@ -1,7 +1,15 @@
 import numpy as np
 
 
-def get_regularizer_with_deriv(regularizer_name):
+class Regularizer:
+
+    def __init__(self, regularizer_details):
+        self.reg_strength = regularizer_details['reg_strength']
+        self.reg_name = regularizer_details['reg_name']
+        self.reg_fn, self.reg_fn_deriv = _get_regularizer_with_deriv(self.reg_name)
+
+
+def _get_regularizer_with_deriv(regularizer_name):
 
     try:
         return _regularizers_with_deriv_dict[regularizer_name]
