@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from ..data.data import Data
-
+from ..optimizers import DEFAULT_OPTIMIZER_DETAILS
 
 class Module(ABC):
 
@@ -17,7 +17,7 @@ class Module(ABC):
         pass
 
 
-    def __init__(self, ID, inputs, output, parameter_list = None, learning_rate = 1e-6):
+    def __init__(self, ID, inputs, output, parameter_list = None, learning_rate = 1e-6, is_frozen = False, optimizer_details = DEFAULT_OPTIMIZER_DETAILS):
         self.ID = ID
 
         self.check_input_output_type(inputs, output)
@@ -28,6 +28,9 @@ class Module(ABC):
 
         self.learning_rate = learning_rate
         self.set_learning_rate(learning_rate)
+
+        self.is_frozen = is_frozen
+        self.optimizer_details = optimizer_details if not is_frozen else None
 
         
     @staticmethod
@@ -50,16 +53,23 @@ class Module(ABC):
 
 
     def update(self):
-        for parameter in self.parameter_list:
-            parameter.update()
+        if not self.is_frozen:
+            for parameter in self.parameter_list:
+                parameter.update()
     
 
     def freeze(self):
+        self.is_frozen = True
+        self.optimizer_details = None
+
         for parameter in self.parameter_list:
             parameter.freeze()
     
 
-    def unfreeze(self, optimizer_details):
+    def unfreeze(self, optimizer_details = DEFAULT_OPTIMIZER_DETAILS):
+        self.is_frozen = False
+        self.optimizer_details = optimizer_details
+
         for parameter in self.parameter_list:
             parameter.unfreeze(optimizer_details)
     
