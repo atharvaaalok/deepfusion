@@ -13,7 +13,7 @@ class Regularizer:
         reg_fn_deriv: Derivative of the regularization function.
     """
 
-    def __init__(self, regularizer_details: dict):
+    def __init__(self, regularizer_details: dict) -> None:
         self.reg_strength = regularizer_details['reg_strength']
         self.reg_name = regularizer_details['reg_name']
         self.reg_fn, self.reg_fn_deriv = _get_regularizer_with_deriv(self.reg_name)
