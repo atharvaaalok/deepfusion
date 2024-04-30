@@ -15,6 +15,8 @@ class Data:
     update step size.
 
     Attributes:
+        ID:
+            A unique string identifier for the Data object.
         shape:
             This is the dimension of the tensor that the object holds. The shape always has one
             dimension higher (with extra last dimension set to 1, as if mini-batch = 1) than the
