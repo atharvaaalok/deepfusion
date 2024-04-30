@@ -31,8 +31,8 @@ class Net:
                 self.graph[input].append(module)
                 self.graph_visual[input.ID].append(module.ID)
         
-        self.graph[module] = output
-        self.graph_visual[module.ID] = output.ID
+        self.graph[module] = [output]
+        self.graph_visual[module.ID] = [output.ID]
 
         self.graph[output] = []
         self.graph_visual[output.ID] = []
