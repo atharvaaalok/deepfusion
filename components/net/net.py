@@ -7,7 +7,7 @@ class Net:
 
     available_modes = ['train', 'test']
 
-    def __init__(self, ID, optimizer_details = DEFAULT_OPTIMIZER_DETAILS, learning_rate = 1e-6):
+    def __init__(self, ID, optimizer_details = DEFAULT_OPTIMIZER_DETAILS, learning_rate = 1e-6, is_regularized = False, regularizer_details = None):
         self.ID = ID
         self.graph = {}
         self.graph_visual = {}
@@ -18,6 +18,9 @@ class Net:
         self.optimizer_details = optimizer_details if not self.is_frozen else None
 
         self.learning_rate = learning_rate
+
+        self.is_regularized = is_regularized
+        self.regularizer_details = regularizer_details if is_regularized else None
         
         self.mode = 'train'
     
@@ -64,6 +67,8 @@ class Net:
     def run_setup(self):
         self.topological_sort()
         self.create_lookup()
+        if self.is_regularized:
+            self.set_regularization(self.regularizer_details)
     
 
     def forward(self):
@@ -110,6 +115,16 @@ class Net:
         self.learning_rate = learning_rate
         for node in self.topological_order:
             node.set_learning_rate(learning_rate)
+    
+
+    def set_regularization(self, regularizer_details):
+        self.is_regularized = True
+        self.regularizer_details = regularizer_details
+
+        for node in self.topological_order:
+            if isinstance(node, Module):
+                if node.is_regularizable:
+                    node.set_regularization(regularizer_details)
 
 
     def set_mode(self, mode):
@@ -119,5 +134,6 @@ class Net:
 
         self.mode = mode
         for node in self.topological_order:
-            if node.different_at_train_test:
-                node.set_mode(mode)
+            if isinstance(node, Module):
+                if node.different_at_train_test:
+                    node.set_mode(mode)
