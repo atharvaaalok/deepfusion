@@ -23,7 +23,7 @@ class Net:
     
 
     def add_nodes(self, module, inputs, output):
-        for input in self.inputs:
+        for input in inputs:
             if input not in self.graph:
                 self.graph[input] = [module]
                 self.graph_visual[input.ID] = [module.ID]
