@@ -51,7 +51,7 @@ class Net:
         stack = []
         for node in self.graph:
             if node not in visited:
-                self.topological_sort_util(node, visited, stack)
+                self._topological_sort_util(node, visited, stack)
         
         self.topological_order = stack[: : -1]
     
