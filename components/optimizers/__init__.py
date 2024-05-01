@@ -23,4 +23,5 @@ _optimizers_dict = {
 }
 
 
-DEFAULT_OPTIMIZER_DETAILS = {'optimizer_name': 'SGD', 'hyperparameters': {}}
+# Set Adam as the default optimizer with default values for the hyperparameters
+DEFAULT_OPTIMIZER_DETAILS = {'optimizer_name': 'Adam', 'hyperparameters': {}}
