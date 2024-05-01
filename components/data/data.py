@@ -118,3 +118,14 @@ class Data:
 
     def set_learning_rate(self, learning_rate: float) -> None:
         self.learning_rate = learning_rate
+    
+
+    def set_optimizer(self, optimizer_details: dict) -> None:
+        """Set an optimizer for the Data object that can be used to update the value.
+
+        Args:
+            optimizer_details: Dictionary containing name of the optimizer and a dictionary of its
+            associated hyperparameters.
+        """
+        if not self.is_frozen:
+            self.optimizer = get_optimizer(self.shape, optimizer_details)
