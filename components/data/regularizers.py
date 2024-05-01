@@ -40,14 +40,21 @@ def _get_regularizer_with_deriv(regularizer_name: str) -> tuple[Callable, Callab
 
 
 
+def _L1_regularizer(x: npt.NDArray) -> npt.NDArray:
+    return np.sum(np.abs(x))
+
+def _L1_regularizer_deriv(x: npt.NDArray) -> npt.NDArray:
+    return np.sign(x)
+
+
 def _L2_regularizer(x: npt.NDArray) -> npt.NDArray:
     return np.sum(x ** 2)
-
 
 def _L2_regularizer_deriv(x: npt.NDArray) -> npt.NDArray:
     return 2 * x
 
 
 _regularizers_with_deriv_dict = {
+    'L1': (_L1_regularizer, _L1_regularizer_deriv),
     'L2': (_L2_regularizer, _L2_regularizer_deriv),
 }
