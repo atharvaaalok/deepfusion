@@ -1,6 +1,7 @@
 from .sgd import SGD
 from .momentum import Momentum
 from .rmsprop import RMSprop
+from .adam import Adam
 
 
 def get_optimizer(data_shape, optimizer_details):
@@ -18,6 +19,7 @@ _optimizers_dict = {
     'SGD': SGD,
     'Momentum': Momentum,
     'RMSprop': RMSprop,
+    'Adam': Adam,
 }
 
 
