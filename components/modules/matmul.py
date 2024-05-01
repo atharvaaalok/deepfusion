@@ -130,11 +130,30 @@ def _weight_initialization(weight_init_type: str, W_shape: tuple[int, int]) -> N
         ValueError: If the specified weight initialization method is not available.
     """
     
-    available_init = ['He']
+    available_init = ['Zero', 'Random', 'Xavier', 'He', 'Sparse']
 
     match weight_init_type:
+        case 'Zero':
+            return np.zeros(W_shape)
+        
+        case 'Random':
+            return np.random.randn(*W_shape) * 0.01
+        
+        case 'Xavier':
+            return np.random.randn(*W_shape) * np.sqrt(1 / W_shape[1])
+        
         case 'He':
             return np.random.randn(*W_shape) * np.sqrt(2 / W_shape[1])
+        
+        case 'Sparse':
+            sparsity = 0.1
+            weights = np.zeros(W_shape)
+            total_weights = np.prod(W_shape)
+            non_zero_count = int(total_weights * sparsity)
+            non_zero_indices = np.random.choice(total_weights, non_zero_count, replace = False)
+            non_zero_values = 0.01 * np.random.randn(non_zero_count)
+            np.put(weights, non_zero_indices, non_zero_values)
+            return weights
         
         case _:
             raise ValueError('Specified initialization method not available.' \

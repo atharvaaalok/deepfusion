@@ -31,21 +31,23 @@ Y_test = f(X_test)
 
 
 # Construct Neural Network
+weight_init_type = 'Random'
+
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
-matmul1 = MatMul(ID = 'matmul1', inputs = [x], output = z1)
+matmul1 = MatMul(ID = 'matmul1', inputs = [x], output = z1, weight_init_type = weight_init_type)
 
 a1 = Data(ID = 'a1', shape = (10, 1))
 relu1 = Relu(ID = 'relu1', inputs = [z1], output = a1)
 
 z2 = Data(ID = 'z2', shape = (10, 1))
-matmul2 = MatMul(ID = 'matmul2', inputs = [a1], output = z2)
+matmul2 = MatMul(ID = 'matmul2', inputs = [a1], output = z2, weight_init_type = weight_init_type)
 
 a2 = Data(ID = 'a2', shape = (10, 1))
 relu2 = Relu(ID = 'relu2', inputs = [z2], output = a2)
 
 z3 = Data(ID = 'z3', shape = (1, 1))
-matmul3 = MatMul(ID = 'matmul3', inputs = [a2], output = z3)
+matmul3 = MatMul(ID = 'matmul3', inputs = [a2], output = z3, weight_init_type = weight_init_type)
 
 y = Data(ID = 'y', shape = (1, 1))
 loss = Data(ID = 'loss', shape = (1, 1))
@@ -53,7 +55,7 @@ mse = MSE(ID = 'mse', inputs = [z3, y], output = loss)
 
 
 regularizer_details = {'reg_strength': 0.0001, 'reg_name': 'L2'}
-optimizer_details = {'optimizer_name': 'Momentum', 'hyperparameters': {'beta': 0.99}}
+optimizer_details = {'optimizer_name': 'AdaGrad', 'hyperparameters': {}}
 
 net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 net.add_nodes(matmul1, [x], z1)
