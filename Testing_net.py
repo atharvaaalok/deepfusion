@@ -53,8 +53,9 @@ mse = MSE(ID = 'mse', inputs = [z3, y], output = loss)
 
 
 regularizer_details = {'reg_strength': 0.0001, 'reg_name': 'L2'}
+optimizer_details = {'optimizer_name': 'Momentum', 'hyperparameters': {'beta': 0.99}}
 
-net = Net(ID = 'net', is_regularized = True, regularizer_details = regularizer_details)
+net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 net.add_nodes(matmul1, [x], z1)
 net.add_nodes(relu1, [z1], a1)
 net.add_nodes(matmul2, [a1], z2)
