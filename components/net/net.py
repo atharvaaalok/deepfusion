@@ -69,6 +69,7 @@ class Net:
         self.create_lookup()
         if self.is_regularized:
             self.set_regularization(self.regularizer_details)
+        self.set_optimizer(self.optimizer_details)
     
 
     def forward(self):
@@ -116,6 +117,13 @@ class Net:
         for node in self.topological_order:
             node.set_learning_rate(learning_rate)
     
+
+    def set_optimizer(self, optimizer_details):
+        if not self.is_frozen:
+            for node in self.topological_order:
+                if isinstance(node, Module):
+                    node.set_optimizer(optimizer_details)
+
 
     def set_regularization(self, regularizer_details):
         self.is_regularized = True
