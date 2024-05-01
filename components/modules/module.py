@@ -138,3 +138,17 @@ class Module(ABC):
         self.learning_rate = learning_rate
         for parameter in self.parameter_list:
             parameter.set_learning_rate(learning_rate)
+    
+
+    def set_optimizer(self, optimizer_details: dict) -> None:
+        """Set optimizer (if module not frozen) for each parameter Data object.
+
+        Args:
+            optimizer_details: Dictionary containing name of the optimizer and a dictionary of its
+            associated hyperparameters.
+        """
+        
+        if not self.is_frozen:
+            self.optimizer_details = optimizer_details
+            for parameter in self.parameter_list:
+                parameter.set_optimizer(optimizer_details)
