@@ -12,6 +12,8 @@ from components.modules.activation_functions.lrelu import LRelu
 from components.modules.activation_functions.prelu import PRelu
 from components.modules.activation_functions.elu import ELU
 
+from components.modules.normalizations.layer_norm import LayerNorm
+
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
 
@@ -39,6 +41,7 @@ Y_test = f(X_test)
 # Construct Neural Network
 weight_init_type = 'Random'
 ActF = Tanh
+Norm = LayerNorm
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
@@ -47,14 +50,20 @@ matmul1 = MatMul(ID = 'matmul1', inputs = [x], output = z1, weight_init_type = w
 a1 = Data(ID = 'a1', shape = (10, 1))
 AF1 = ActF(ID = 'AF1', inputs = [z1], output = a1)
 
+a1_norm = Data(ID = 'a1_norm', shape = (10, 1))
+Norm1 = Norm(ID = 'Norm1', inputs = [a1], output = a1_norm)
+
 z2 = Data(ID = 'z2', shape = (10, 1))
-matmul2 = MatMul(ID = 'matmul2', inputs = [a1], output = z2, weight_init_type = weight_init_type)
+matmul2 = MatMul(ID = 'matmul2', inputs = [a1_norm], output = z2, weight_init_type = weight_init_type)
 
 a2 = Data(ID = 'a2', shape = (10, 1))
 AF2 = ActF(ID = 'AF2', inputs = [z2], output = a2)
 
+a2_norm = Data(ID = 'a2_norm', shape = (10, 1))
+Norm2 = Norm(ID = 'Norm2', inputs = [a2], output = a2_norm)
+
 z3 = Data(ID = 'z3', shape = (1, 1))
-matmul3 = MatMul(ID = 'matmul3', inputs = [a2], output = z3, weight_init_type = weight_init_type)
+matmul3 = MatMul(ID = 'matmul3', inputs = [a2_norm], output = z3, weight_init_type = weight_init_type)
 
 y = Data(ID = 'y', shape = (1, 1))
 loss = Data(ID = 'loss', shape = (1, 1))
@@ -67,9 +76,11 @@ optimizer_details = {'optimizer_name': 'Adam', 'hyperparameters': {}}
 net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 net.add_nodes(matmul1, [x], z1)
 net.add_nodes(AF1, [z1], a1)
-net.add_nodes(matmul2, [a1], z2)
+net.add_nodes(Norm1, [a1], a1_norm)
+net.add_nodes(matmul2, [a1_norm], z2)
 net.add_nodes(AF2, [z2], a2)
-net.add_nodes(matmul3, [a2], z3)
+net.add_nodes(Norm2, [a2], a2_norm)
+net.add_nodes(matmul3, [a2_norm], z3)
 net.add_nodes(mse, [z3, y], loss)
 
 net.run_setup()
