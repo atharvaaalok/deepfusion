@@ -4,11 +4,14 @@ import numpy as np
 from components.data.data import Data
 from components.optimizers.sgd import SGD
 from components.modules.matmul import MatMul
+
 from components.modules.activation_functions.relu import Relu
 from components.modules.activation_functions.sigmoid import Sigmoid
 from components.modules.activation_functions.tanh import Tanh
 from components.modules.activation_functions.lrelu import LRelu
 from components.modules.activation_functions.prelu import PRelu
+from components.modules.activation_functions.elu import ELU
+
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
 
@@ -35,7 +38,7 @@ Y_test = f(X_test)
 
 # Construct Neural Network
 weight_init_type = 'Random'
-ActF = PRelu
+ActF = ELU
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
