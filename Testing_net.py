@@ -7,6 +7,7 @@ from components.modules.matmul import MatMul
 from components.modules.activation_functions.relu import Relu
 from components.modules.activation_functions.sigmoid import Sigmoid
 from components.modules.activation_functions.tanh import Tanh
+from components.modules.activation_functions.lrelu import LRelu
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
 
@@ -33,7 +34,7 @@ Y_test = f(X_test)
 
 # Construct Neural Network
 weight_init_type = 'Random'
-ActF = Tanh
+ActF = LRelu
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
