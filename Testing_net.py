@@ -8,6 +8,7 @@ from components.modules.activation_functions.relu import Relu
 from components.modules.activation_functions.sigmoid import Sigmoid
 from components.modules.activation_functions.tanh import Tanh
 from components.modules.activation_functions.lrelu import LRelu
+from components.modules.activation_functions.prelu import PRelu
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
 
@@ -34,7 +35,7 @@ Y_test = f(X_test)
 
 # Construct Neural Network
 weight_init_type = 'Random'
-ActF = LRelu
+ActF = PRelu
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
@@ -58,7 +59,7 @@ mse = MSE(ID = 'mse', inputs = [z3, y], output = loss)
 
 
 regularizer_details = {'reg_strength': 0.0001, 'reg_name': 'L2'}
-optimizer_details = {'optimizer_name': 'AdaGrad', 'hyperparameters': {}}
+optimizer_details = {'optimizer_name': 'Adam', 'hyperparameters': {}}
 
 net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 net.add_nodes(matmul1, [x], z1)
@@ -70,7 +71,7 @@ net.add_nodes(mse, [z3, y], loss)
 
 net.run_setup()
 
-learning_rate = 1
+learning_rate = 0.01
 net.set_learning_rate(learning_rate)
 
 
@@ -90,3 +91,7 @@ for epoch in range(epochs):
     net.backward()
 
     net.update()
+
+
+print(AF1.alpha.__dict__)
+print(AF2.alpha.__dict__)
