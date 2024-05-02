@@ -5,9 +5,9 @@ from components.data.data import Data
 from components.optimizers.sgd import SGD
 from components.modules.matmul import MatMul
 from components.modules.activation_functions.relu import Relu
+from components.modules.activation_functions.sigmoid import Sigmoid
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
-
 
 def f(X):
     Y = X[0, :] + 2 * X[1, :] ** 2 + 3 * X[2, :] ** 0.5
@@ -32,19 +32,20 @@ Y_test = f(X_test)
 
 # Construct Neural Network
 weight_init_type = 'Random'
+ActF = Sigmoid
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
 matmul1 = MatMul(ID = 'matmul1', inputs = [x], output = z1, weight_init_type = weight_init_type)
 
 a1 = Data(ID = 'a1', shape = (10, 1))
-relu1 = Relu(ID = 'relu1', inputs = [z1], output = a1)
+AF1 = ActF(ID = 'AF1', inputs = [z1], output = a1)
 
 z2 = Data(ID = 'z2', shape = (10, 1))
 matmul2 = MatMul(ID = 'matmul2', inputs = [a1], output = z2, weight_init_type = weight_init_type)
 
 a2 = Data(ID = 'a2', shape = (10, 1))
-relu2 = Relu(ID = 'relu2', inputs = [z2], output = a2)
+AF2 = ActF(ID = 'AF2', inputs = [z2], output = a2)
 
 z3 = Data(ID = 'z3', shape = (1, 1))
 matmul3 = MatMul(ID = 'matmul3', inputs = [a2], output = z3, weight_init_type = weight_init_type)
@@ -59,9 +60,9 @@ optimizer_details = {'optimizer_name': 'AdaGrad', 'hyperparameters': {}}
 
 net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 net.add_nodes(matmul1, [x], z1)
-net.add_nodes(relu1, [z1], a1)
+net.add_nodes(AF1, [z1], a1)
 net.add_nodes(matmul2, [a1], z2)
-net.add_nodes(relu2, [z2], a2)
+net.add_nodes(AF2, [z2], a2)
 net.add_nodes(matmul3, [a2], z3)
 net.add_nodes(mse, [z3, y], loss)
 
