@@ -13,6 +13,7 @@ from components.modules.activation_functions.prelu import PRelu
 from components.modules.activation_functions.elu import ELU
 
 from components.modules.dropout.inverted_dropout import InvertedDropout
+from components.modules.dropout.dropout import Dropout
 
 from components.modules.loss_functions.mse import MSE
 from components.net.net import Net
@@ -41,8 +42,8 @@ Y_test = f(X_test)
 # Construct Neural Network
 weight_init_type = 'Random'
 ActF = Tanh
-Drop = InvertedDropout
-p_keep = 0.2
+Drop = Dropout
+p_keep = 0.5
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
