@@ -1,6 +1,5 @@
 import numpy as np
 
-
 from components.data.data import Data
 from components.optimizers.sgd import SGD
 from components.modules.matmul import MatMul

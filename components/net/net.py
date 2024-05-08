@@ -1,21 +1,58 @@
+from typing import Optional
+
 from ..data.data import Data
 from ..modules.module import Module
 from ..optimizers import DEFAULT_OPTIMIZER_DETAILS
 
 
 class Net:
+    """Directed Acyclic Graph that is composed of alternating data and module nodes. Neural network
+    training happens through this net object.
+
+    Attributes:
+        ID:
+            A unique string identifier for the Net object.
+        root_nodes:
+            List of leaf nodes which represent losses.
+        learning_rate:
+            Controls the step size of the update for the network's parameters.
+        is_frozen:
+            Boolean that decides if updates will be made to network's parameters or not.
+        optimizer_details:
+            Dictionary containing name of the optimizer and a dictionary of its associated
+            hyperparameters.
+        is_regularized:
+            Boolean that decides if some parameters for the network are regularized.
+        regularizer_details:
+            Dictionary containing the regularization strength and the regularizer name.
+        mode:
+            Network works differently in train and test. Maintain state to use appropriate values.
+        graph:
+            A dictionary of node objects that represents the directed acyclic graph.
+        graph_visual:
+            A dictionary of node object IDs that represents the directed acyclic graph in human
+            readable format.
+        topological_order:
+            A list of the nodes in the network in a topologically sorted order. Order:
+            Inputs -> Losses.
+        node_lookup:
+            A dictionary mapping node IDs to node objects. Helpful for retrieving a node based on
+            its ID.
+    """
 
     available_modes = ['train', 'test']
+    
 
     def __init__(
         self,
-        ID,
-        root_nodes,
-        optimizer_details = DEFAULT_OPTIMIZER_DETAILS,
-        learning_rate = 1e-6,
-        is_regularized = False,
-        regularizer_details = None,
+        ID: str,
+        root_nodes: list[Data],
+        learning_rate: float = 1e-6,
+        optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS,
+        is_regularized: bool = False,
+        regularizer_details: Optional[dict] = None,
     ) -> None:
+        """Initializes a Net based on ID, list of root nodes and other optional parameters."""
         
         self.ID = ID
         
@@ -26,10 +63,10 @@ class Net:
         self.topological_order = []
         self.node_lookup = {}
 
+        self.learning_rate = learning_rate
+
         self.is_frozen = False
         self.optimizer_details = optimizer_details if not self.is_frozen else None
-
-        self.learning_rate = learning_rate
 
         self.is_regularized = is_regularized
         self.regularizer_details = regularizer_details if is_regularized else None
@@ -39,17 +76,22 @@ class Net:
         self.run_setup()
     
 
-    def run_setup(self):
+    def run_setup(self) -> None:
+        """Run by __init__() on network initialization to set topological order, graph dictionary
+        and node lookup attributes. Also sets optimizer and regularization details."""
         self.topological_sort()
         self.create_graph_dicts()
         self.create_lookup()
 
-        if self.is_regularized:
-            self.set_regularization(self.regularizer_details)
         self.set_optimizer(self.optimizer_details)
 
+        if self.is_regularized:
+            self.set_regularization(self.regularizer_details)
 
-    def topological_sort(self):
+
+    def topological_sort(self) -> None:
+        """Creates a topological sort for the network based on the root nodes of the net. Order of
+        nodes: Inputs -> Losses."""
         topological_order = []
         visited_nodes = set()
 
@@ -69,7 +111,9 @@ class Net:
         self.topological_order = topological_order
     
 
-    def create_graph_dicts(self):
+    def create_graph_dicts(self) -> None:
+        """Sets the graph and graph_visual attributes for the network. Requires the topological sort
+        to be already available."""
         for node in self.topological_order:
             if isinstance(node, Data):
                 self.graph[node] = node.outputs
@@ -79,29 +123,38 @@ class Net:
                 self.graph_visual[node.ID] = [node.output.ID]
 
 
-    def create_lookup(self):
+    def create_lookup(self) -> None:
+        """Sets the node_lookup attribute for the network. Requires the topological sort to be
+        already available."""
         for node in self.topological_order:
             self.node_lookup[node.ID] = node
     
 
-    def forward(self):
+    def forward(self) -> None:
+        """Runs the forward method of each module in topological order to perform the neural net
+        forward pass."""
         for node in self.topological_order:
             if isinstance(node, Module):
                 node.forward()
 
 
-    def backward(self):
+    def backward(self) -> None:
+        """Runs the backward method of each module in reverse topological order to perform the
+        neural net backward pass."""
         for node in reversed(self.topological_order):
             if isinstance(node, Module):
                 node.backward()
 
 
-    def update(self):
+    def update(self) -> None:
+        """Updates all the parameters (non-frozen) of each node (Data/Module) in the neural
+        network."""
         for node in self.topological_order:
             node.update()
 
 
-    def freeze(self):
+    def freeze(self) -> None:
+        """Freezes all the modules (only, not non-frozen Data objects) of the neural network."""
         self.is_frozen = True
         self.optimizer_details = None
 
@@ -110,7 +163,8 @@ class Net:
                 node.freeze()
 
 
-    def unfreeze(self, optimizer_details = DEFAULT_OPTIMIZER_DETAILS):
+    def unfreeze(self, optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS) -> None:
+        """Unfreezes all the modules (only, not frozen Data objects) of the neural network."""
         self.is_frozen = False
         self.optimizer_details = optimizer_details
 
@@ -119,25 +173,38 @@ class Net:
                 node.unfreeze(optimizer_details = optimizer_details)
 
 
-    def clear_grads(self):
+    def clear_grads(self) -> None:
+        """Clears gradients for each node (Data/Module) in the neural network."""
         for node in self.topological_order:
             node.clear_grads()
     
 
-    def set_learning_rate(self, learning_rate):
+    def set_learning_rate(self, learning_rate: float) -> None:
+        """Sets learning rate for each node (Data/Module) of the neural network."""
         self.learning_rate = learning_rate
         for node in self.topological_order:
             node.set_learning_rate(learning_rate)
     
 
-    def set_optimizer(self, optimizer_details):
-        if not self.is_frozen:
-            for node in self.topological_order:
-                if isinstance(node, Module):
-                    node.set_optimizer(optimizer_details)
+    def set_optimizer(self, optimizer_details: dict) -> None:
+        """Sets optimizer for all the modules (only, not non-frozen Data objects) of the neural
+        network.
+        
+        Raises:
+            ValueError: If the net is frozen.
+        """
+        if self.is_frozen:
+            raise ValueError("Net is frozen. Cannot set optimizer in frozen state. Unfreeze first.")
+        
+        self.optimizer_details = optimizer_details
+        for node in self.topological_order:
+            if isinstance(node, Module):
+                node.set_optimizer(optimizer_details)
 
 
-    def set_regularization(self, regularizer_details):
+    def set_regularization(self, regularizer_details) -> None:
+        """Sets regularizer details for all the regularized modules (only, not regularized Data
+        objects) of the neural network."""
         self.is_regularized = True
         self.regularizer_details = regularizer_details
 
@@ -147,8 +214,8 @@ class Net:
                     node.set_regularization(regularizer_details)
 
 
-    def set_mode(self, mode):
-
+    def set_mode(self, mode: str) -> None:
+        """Sets the mode (training/testing) for the neural network."""
         if mode not in self.available_modes:
             raise ValueError(f'Specified mode is not available. Choose from {self.available_modes}')
 
