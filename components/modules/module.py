@@ -69,6 +69,9 @@ class Module(ABC):
         self.is_frozen = is_frozen
         self.optimizer_details = optimizer_details if not is_frozen else None
 
+        # Store the current module object in the outputs and input of the associated Data objects
+        self.set_data_obj_in_out(inputs, output)
+
         
     @staticmethod
     def _check_input_output_type(inputs: list[Data], output: Data) -> None:
@@ -86,6 +89,22 @@ class Module(ABC):
         for node in nodes:
             if not isinstance(node, Data):
                 raise ValueError('Inputs and Output provided should be objects of the Data class.')
+    
+
+    def set_data_obj_in_out(self, inputs: list[Data], output: Data) -> None:
+        """Stores the current module object in the outputs and input of associated Data objects.
+        
+        Args:
+            inputs: List of Data objects whose values the module transforms to produce an output.
+            output: Data object which stores the modules output after transforming the input values.
+        """
+        
+        # Add the module to the input Data object's outputs list
+        for input in inputs:
+            input.outputs.append(self)
+        
+        # Store the module in the output Data object's input field
+        output.input = self
 
 
     @abstractmethod
