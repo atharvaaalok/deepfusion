@@ -37,6 +37,10 @@ class Data:
             Boolean that decides if the data contributes to regularization loss.
         regularizer:
             Regularizer object that holds the regularization strength and function.
+        input:
+            Stores Module object the output of which is stored in the Data object.
+        outputs:
+            List of Module objects which use the Data object's value.
     """
 
     def __init__(
@@ -72,6 +76,10 @@ class Data:
         if is_regularized and regularizer_details is None:
             raise ValueError('If Data is regularized, regularizer details must be provided.')
         self.regularizer = None if regularizer_details is None else Regularizer(regularizer_details)
+
+        # Create empty lists for storing input and outputs. These will be filled by modules.
+        self.input = None
+        self.outputs = []
     
     
     def update(self) -> None:
