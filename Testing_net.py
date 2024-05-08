@@ -64,15 +64,13 @@ mse = MSE(ID = 'mse', inputs = [z3, y], output = loss)
 regularizer_details = {'reg_strength': 0.0001, 'reg_name': 'L2'}
 optimizer_details = {'optimizer_name': 'Adam', 'hyperparameters': {}}
 
-net = Net(ID = 'net', optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
-net.add_nodes(matmul1, [x], z1)
-net.add_nodes(AF1, [z1], a1)
-net.add_nodes(matmul2, [a1], z2)
-net.add_nodes(AF2, [z2], a2)
-net.add_nodes(matmul3, [a2], z3)
-net.add_nodes(mse, [z3, y], loss)
+net = Net(ID = 'net', root_nodes = [loss], optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 
-net.run_setup()
+print([ele.ID for ele in net.topological_order])
+print()
+print(net.graph_visual)
+print()
+
 
 learning_rate = 0.01
 net.set_learning_rate(learning_rate)
@@ -94,7 +92,3 @@ for epoch in range(epochs):
     net.backward()
 
     net.update()
-
-
-# print(AF1.alpha.__dict__)
-# print(AF2.alpha.__dict__)
