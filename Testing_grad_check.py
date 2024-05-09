@@ -52,4 +52,4 @@ x.val = X_train
 y.val = Y_train
 
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-5)
+gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, h = 1e-5)

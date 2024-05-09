@@ -13,9 +13,16 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
         loss_obj: Loss object whose value is the output of the neural network.
         h: The step size used in calculating the value of the gradient.
     """
+
+    # Determine if the data_obj is a data node or is a parameter inside a module
+    if data_obj in net.topological_order:
+        data_node = True
+    else:
+        data_node = False
     
     ## Calculate analytic gradient
-    net.forward()
+    # Run forward() if a parameter is passed, else if a data_node is passed run forward_from_node()
+    net.forward_from_node(data_obj) if data_node else net.forward()
     net.backward()
     analytic_grad = data_obj.deriv
 
@@ -36,12 +43,12 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
 
         # Evaluate network at x + h
         x[idx] = old_x + h
-        net.forward()
+        net.forward_from_node(data_obj) if data_node else net.forward()
         f_plus = loss_obj.val
 
         # Evaluate network at x - h
         x[idx] = old_x - h
-        net.forward()
+        net.forward_from_node(data_obj) if data_node else net.forward()
         f_minus = loss_obj.val
 
         # Compute numeric gradient at the current x index
