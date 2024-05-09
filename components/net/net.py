@@ -207,6 +207,26 @@ class Net:
                     module_times.append(time.time() - start_time)
             
             self._print_module_times(module_names, module_times, pass_name = 'Backward')
+    
+
+    def forward_from_node(self, node: Data) -> None:
+        """Runs the forward method starting from a particular node of each module afterwards in
+        topological order.
+        
+        Args:
+            node: Data object from which to start the forward pass.
+        
+        Raises:
+            ValueError: If forward pass is initialized at a module instead of a Data object.
+        """
+        if not isinstance(node, Data):
+            raise ValueError('Forward pass can only be initialized starting from a Data object.')
+        
+        node_idx = self.topological_order.index(node)
+
+        for node in self.topological_order[node_idx: ]:
+            if isinstance(node, Module):
+                node.forward()
 
 
     def update(self) -> None:
