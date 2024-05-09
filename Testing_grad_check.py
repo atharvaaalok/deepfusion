@@ -51,5 +51,5 @@ net = Net(ID = 'Net', root_nodes = [loss])
 x.val = X_train
 y.val = Y_train
 
-
-gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, h = 1e-5)
+batch_size = m_train
+gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, batch_size = batch_size, h = 1e-5)
