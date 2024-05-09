@@ -51,22 +51,22 @@ net = Net(ID = 'Net', root_nodes = [loss])
 
 
 # Train neural network
-epochs = 1000
+epochs = 1
 print_cost_every = 100
 learning_rate = 0.01
 
 net.set_learning_rate(learning_rate)
 
-for epoch in range(epochs):
+for epoch in range(1, epochs + 1):
     x.val = X_train
     y.val = Y_train
 
-    net.forward()
+    net.forward(verbose = True)
 
-    if epoch % print_cost_every == 0:
+    if epoch % print_cost_every == 0 or epoch == 1:
         J = loss.val
         print(f'Epoch [{epoch}/{epochs}]. Cost: {J}')
     
-    net.backward()
+    net.backward(verbose = True)
 
     net.update()

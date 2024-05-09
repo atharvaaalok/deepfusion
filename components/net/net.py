@@ -1,4 +1,5 @@
 from typing import Optional
+import time
 
 from ..data.data import Data
 from ..modules.module import Module
@@ -130,20 +131,82 @@ class Net:
             self.node_lookup[node.ID] = node
     
 
-    def forward(self) -> None:
+    @staticmethod
+    def _print_module_times(module_names: list[str], module_times: list[float], pass_name: str):
+        """Prints the time taken (absolute, percentage) by each module in forward/backward pass.
+        
+        Args:
+            module_names: List of module names that were run during the forward/backward pass.
+            module_times: List of time taken by each module during the forward/backward pass.
+            pass_name: Name of the pass. Either 'Forward' or 'Backward'.
+        """
+        total_time_taken = sum(module_times)
+        max_name = max(len(name) for name in module_names)
+
+        # Set colors that will be used to highlight the print output
+        red = '\033[0;31m' # Red
+        cyan = '\033[0;36m' # Cyan
+        color_end = '\033[0m' # Reset terminal color
+
+        print(f'\n{pass_name} Time\n' + '-' * 50)
+        for module, t in zip(module_names, module_times):
+            print(f'{red}{module:{max_name}}{color_end} ran in: {t:.4f} s' \
+                  f' {cyan}[{(t / total_time_taken) * 100:05.2f}%]{color_end}.')
+        
+        print(f'{red}Total Time{color_end}: {total_time_taken:.4f} s.')
+        print()
+    
+
+    def forward(self, verbose = False) -> None:
         """Runs the forward method of each module in topological order to perform the neural net
-        forward pass."""
-        for node in self.topological_order:
-            if isinstance(node, Module):
-                node.forward()
+        forward pass.
+        
+        Args:
+            verbose: Flag that decides whether to print the time taken by each module to run.
+        """
+        if not verbose:
+            for node in self.topological_order:
+                if isinstance(node, Module):
+                    node.forward()
+        else:
+            module_names = []
+            module_times = []
 
+            for node in self.topological_order:
+                if isinstance(node, Module):
+                    module_names.append(node.ID)
+                    start_time = time.time()
+                    # Run the module's forward method
+                    node.forward()
+                    module_times.append(time.time() - start_time)
+            
+            self._print_module_times(module_names, module_times, pass_name = 'Forward')
+    
 
-    def backward(self) -> None:
+    def backward(self, verbose = False) -> None:
         """Runs the backward method of each module in reverse topological order to perform the
-        neural net backward pass."""
-        for node in reversed(self.topological_order):
-            if isinstance(node, Module):
-                node.backward()
+        neural net backward pass.
+        
+        Args:
+            verbose: Flag that decides whether to print the time taken by each module to run.
+        """
+        if not verbose:
+            for node in reversed(self.topological_order):
+                if isinstance(node, Module):
+                    node.backward()
+        else:
+            module_names = []
+            module_times = []
+
+            for node in reversed(self.topological_order):
+                if isinstance(node, Module):
+                    module_names.append(node.ID)
+                    start_time = time.time()
+                    # Run the module's backward method
+                    node.backward()
+                    module_times.append(time.time() - start_time)
+            
+            self._print_module_times(module_names, module_times, pass_name = 'Backward')
 
 
     def update(self) -> None:
