@@ -2,8 +2,9 @@ import numpy as np
 
 from .components.data import Data
 from .components.modules import MatMul
-from .components.modules.activation_functions import ELU
+from .components.modules.activation_functions import Tanh
 from .components.modules.loss_functions import MSE
+from .components.modules.normalizations import BatchNorm
 from .components.net import Net
 from .utils.grad_check import gradient_checker
 
@@ -32,10 +33,13 @@ z = Data(ID = f'z', shape = (10, 1))
 matmul = MatMul(ID = f'MatMul', inputs = inputs, output = z, weight_init_type = 'Random')
 
 a = Data(ID = f'a', shape = (10, 1))
-act_f = ELU(ID = f'Tanh', inputs = [z], output = a)
+act_f = Tanh(ID = f'ActF', inputs = [z], output = a)
+
+a_norm = Data(ID = 'a_norm', shape = (10, 1))
+norm = BatchNorm(ID = 'Norm', inputs = [a], output = a_norm)
 
 z2 = Data(ID = f'z2', shape = (1, 1))
-mat = MatMul(ID = f'MatMul2', inputs = [a], output = z2, weight_init_type = 'Random')
+mat = MatMul(ID = f'MatMul2', inputs = [a_norm], output = z2, weight_init_type = 'Random')
 
 # Initialize target variable, loss variable and attach loss function
 y = Data(ID = 'y', shape = (1, 1))
@@ -52,4 +56,4 @@ x.val = X_train
 y.val = Y_train
 
 
-gradient_checker(net = net, data_obj = act_f.alpha, loss_obj = loss, h = 1e-5)
+gradient_checker(net = net, data_obj = norm.beta, loss_obj = loss, h = 1e-5)

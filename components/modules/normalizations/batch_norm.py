@@ -134,8 +134,6 @@ class BatchNorm(Module):
 
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
-
         out_deriv = self.output.deriv
 
         # Retrieve mu and sigma_sq from cache
@@ -146,8 +144,8 @@ class BatchNorm(Module):
         X_hat = (X - mu) / np.sqrt(sigma_sq + self.epsilon)
 
         # Set derivatives for the parameters beta and gamma
-        self.beta.deriv = (1 / batch_size) * np.sum(out_deriv, axis = 1, keepdims = True)
-        self.gamma.deriv = (1 / batch_size) * np.sum(out_deriv * X_hat, axis = 1, keepdims = True)
+        self.beta.deriv = np.sum(out_deriv, axis = 1, keepdims = True)
+        self.gamma.deriv = np.sum(out_deriv * X_hat, axis = 1, keepdims = True)
 
         # Calculate derivative of loss w.r.t. X_hat
         dX_hat = self.gamma.val * out_deriv
