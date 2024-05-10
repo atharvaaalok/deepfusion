@@ -3,9 +3,9 @@ import numpy as np
 from .components.data import Data
 from .components.modules import MatMul
 from .components.modules.activation_functions import Tanh
-from .components.modules.loss_functions import MSE
 from .components.modules.normalizations import BatchNorm
 from .components.modules.dropout import InvertedDropout
+from .components.modules.loss_functions import Logistic
 from .components.net import Net
 from .utils.grad_check import gradient_checker
 
@@ -36,16 +36,13 @@ matmul = MatMul(ID = f'MatMul', inputs = inputs, output = z, weight_init_type = 
 a = Data(ID = f'a', shape = (10, 1))
 act_f = Tanh(ID = f'ActF', inputs = [z], output = a)
 
-a_drop = Data(ID = 'a_drop', shape = (10, 1))
-norm = InvertedDropout(ID = 'Norm', inputs = [a], output = a_drop)
-
 z2 = Data(ID = f'z2', shape = (1, 1))
-mat = MatMul(ID = f'MatMul2', inputs = [a_drop], output = z2, weight_init_type = 'Random')
+mat = MatMul(ID = f'MatMul2', inputs = [a], output = z2, weight_init_type = 'Random')
 
 # Initialize target variable, loss variable and attach loss function
 y = Data(ID = 'y', shape = (1, 1))
 loss = Data(ID = 'loss', shape = (1, 1))
-mse = MSE(ID = 'MSE', inputs = [z2, y], output = loss)
+mse = Logistic(ID = 'MSE', inputs = [z2, y], output = loss)
 
 
 # Initialize neural network
