@@ -67,3 +67,18 @@ class InvertedDropout(Module):
     @override
     def backward(self) -> None:
         self.inputs[0].deriv = self.output.deriv * self.cache['mask']
+    
+
+    def set_mode(self, mode: str) -> None:
+        """Sets the mode (training/testing) for the module.
+        
+        Args:
+            mode: String determining whether the network is in 'train' or 'test' mode.
+        
+        Raises:
+            ValueError: If the specified mode is not available.
+        """
+        if mode not in self.available_modes:
+            raise ValueError(f'Specified mode is not available. Choose from {self.available_modes}')
+        
+        self.mode = mode

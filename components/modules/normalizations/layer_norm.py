@@ -131,3 +131,18 @@ class LayerNorm(Module):
         dX_3 = - X_hat * np.mean(X_hat * dX_hat, axis = 0, keepdims = True)
 
         self.inputs[0].deriv = (1 / np.sqrt(sigma_sq + self.epsilon)) * (dX_1 + dX_2 + dX_3)
+    
+
+    def set_mode(self, mode: str) -> None:
+        """Sets the mode (training/testing) for the module.
+        
+        Args:
+            mode: String determining whether the network is in 'train' or 'test' mode.
+        
+        Raises:
+            ValueError: If the specified mode is not available.
+        """
+        if mode not in self.available_modes:
+            raise ValueError(f'Specified mode is not available. Choose from {self.available_modes}')
+        
+        self.mode = mode

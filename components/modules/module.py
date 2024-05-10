@@ -37,7 +37,9 @@ class Module(ABC):
     @abstractmethod
     def is_regularizable():
         pass
-
+    
+    available_modes = ['train', 'test']
+    
 
     def __init__(
         self,
