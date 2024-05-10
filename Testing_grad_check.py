@@ -18,7 +18,7 @@ np.random.seed(0)
 
 
 # Generate training data
-m_train = 1
+m_train = 3
 factor = 5
 X_train = np.random.rand(3, m_train) * factor
 Y_train = f(X_train)
@@ -51,5 +51,4 @@ net = Net(ID = 'Net', root_nodes = [loss])
 x.val = X_train
 y.val = Y_train
 
-batch_size = m_train
-gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, batch_size = batch_size, h = 1e-5)
+gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, h = 1e-5)

@@ -4,7 +4,7 @@ from ..components.net import Net
 from ..components.data import Data
 
 
-def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, batch_size: int, h: float = 1e-5) -> None:
+def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) -> None:
     """Performs comparison between analytic and numeric gradient for a data object in a neural net.
     
     Args:
@@ -53,7 +53,7 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, batch_size: int, 
         f_minus = loss_obj.val
 
         # Compute numeric gradient at the current x index
-        numeric_grad[idx] = (1 / batch_size) * ((f_plus - f_minus) / (2 * h))
+        numeric_grad[idx] = (f_plus - f_minus) / (2 * h)
 
         # Restore old value of x
         x[idx] = old_x
