@@ -25,6 +25,8 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
     net.forward()
     
     ## Calculate analytic gradient
+    # Set random seed before running forward. Helps if dropout layers are present
+    np.random.seed(0)
     # Run forward() if a parameter is passed, else if a data_node is passed run forward_from_node()
     net.forward_from_node(data_obj) if data_node else net.forward()
     net.backward()
@@ -47,11 +49,13 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
 
         # Evaluate network at x + h
         x[idx] = old_x + h
+        np.random.seed(0)
         net.forward_from_node(data_obj) if data_node else net.forward()
         f_plus = loss_obj.val
 
         # Evaluate network at x - h
         x[idx] = old_x - h
+        np.random.seed(0)
         net.forward_from_node(data_obj) if data_node else net.forward()
         f_minus = loss_obj.val
 
