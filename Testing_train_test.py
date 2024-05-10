@@ -2,7 +2,7 @@ import numpy as np
 
 from components.data import Data
 from components.modules import MatMul
-from components.modules.activation_functions import Relu
+from components.modules.activation_functions import Sigmoid
 from components.modules.normalizations import BatchNorm
 from components.modules.dropout import InvertedDropout
 from components.modules.loss_functions import MSE
@@ -33,7 +33,7 @@ Y_test = f(X_test)
 x = Data(ID = 'x', shape = (3, 1))
 inputs = [x]
 
-ActF = Relu
+ActF = Sigmoid
 Norm = BatchNorm
 Drop = InvertedDropout
 p_keep = 0.8
@@ -83,8 +83,8 @@ print()
 
 
 # Train neural network
-epochs = 10000
-print_cost_every = 1000
+epochs = 1000
+print_cost_every = 100
 learning_rate = 0.1
 k = 0.1
 
