@@ -51,7 +51,7 @@ class PRelu(Module):
 
         self.alpha = Data(ID = ID + '_alpha',
                           shape = (),
-                          val = alpha,
+                          val = np.array(alpha),
                           is_frozen = is_frozen,
                           optimizer_details = optimizer_details)
 
@@ -70,8 +70,6 @@ class PRelu(Module):
 
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
-
         x = self.inputs[0].val
         self.inputs[0].deriv = self.output.deriv * np.where(x >= 0, 1, self.alpha.val)
-        self.alpha.deriv = (1 / batch_size) * np.sum(self.output.deriv * np.where(x >= 0, 0, x))
+        self.alpha.deriv = np.sum(self.output.deriv * np.where(x >= 0, 0, x))
