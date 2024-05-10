@@ -11,7 +11,6 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
         net: Neural network for which the gradient checking is to be done.
         data_obj: Data object w.r.t. whose value the gradients are to be calculated.
         loss_obj: Loss object whose value is the output of the neural network.
-        batch_size: Mini batch size used in the forward pass for the neural network.
         h: The step size used in calculating the value of the gradient.
     """
 
