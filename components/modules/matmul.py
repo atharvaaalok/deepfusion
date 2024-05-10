@@ -98,12 +98,10 @@ class MatMul(Module):
     
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
-
         self.inputs[0].deriv = self.W.val.T @ self.output.deriv
 
-        self.W.deriv = (1 / batch_size) * (self.output.deriv @ self.inputs[0].val.T)
-        self.b.deriv = (1 / batch_size) * (np.sum(self.output.deriv, axis = 1, keepdims = True))
+        self.W.deriv = self.output.deriv @ self.inputs[0].val.T
+        self.b.deriv = np.sum(self.output.deriv, axis = 1, keepdims = True)
 
     
     def set_regularization(self, regularizer_details: dict) -> None:

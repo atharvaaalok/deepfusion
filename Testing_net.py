@@ -37,7 +37,7 @@ Y_test = f(X_test)
 
 # Construct Neural Network
 weight_init_type = 'Random'
-ActF = Tanh
+ActF = Relu
 
 x = Data(ID = 'x', shape = (3, 1))
 z1 = Data(ID = 'z1', shape = (10, 1))
@@ -65,26 +65,20 @@ optimizer_details = {'optimizer_name': 'Adam', 'hyperparameters': {}}
 
 net = Net(ID = 'net', root_nodes = [loss], optimizer_details = optimizer_details, is_regularized = True, regularizer_details = regularizer_details)
 
-print([ele.ID for ele in net.topological_order])
-print()
-print(net.graph_visual)
-print()
-
-
-learning_rate = 0.01
-net.set_learning_rate(learning_rate)
-
 
 epochs = 1000
 print_cost_every = 100
+learning_rate = 0.01
 
-for epoch in range(epochs):
+net.set_learning_rate(learning_rate)
+
+for epoch in range(1, epochs + 1):
     x.val = X_train
     y.val = Y_train
 
     net.forward()
 
-    if epoch % print_cost_every == 0:
+    if epoch % print_cost_every == 0 or epoch == 1:
         J = loss.val
         print(f'Epoch [{epoch}/{epochs}]. Cost: {J}')
     
