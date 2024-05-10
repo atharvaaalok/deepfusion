@@ -21,6 +21,9 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
     else:
         data_node = False
     
+    # Run the neural network forward once to set the data object values
+    net.forward()
+    
     ## Calculate analytic gradient
     # Run forward() if a parameter is passed, else if a data_node is passed run forward_from_node()
     net.forward_from_node(data_obj) if data_node else net.forward()
