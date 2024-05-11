@@ -1,5 +1,6 @@
 from typing import Optional
 import time
+from graphviz import Source
 
 from ..data.data import Data
 from ..modules.module import Module
@@ -314,3 +315,32 @@ class Net:
             if isinstance(node, Module):
                 if node.different_at_train_test:
                     node.set_mode(mode)
+    
+
+    def visualize(self) -> None:
+        """Draws a graph to visualize the network."""
+
+        dag = self.graph
+
+        dot_string = 'digraph G {\n'
+        dot_string += '    rankdir=LR;\n'  # Set direction to left to right
+
+        # Add nodes with their IDs and shapes
+        for node, connected_nodes in dag.items():
+            # Use ellipse to represent Data nodes and rectangles for Modules
+            shape = 'ellipse' if isinstance(node, Data) else 'rect'
+            dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}"];\n'
+            for connected_node in connected_nodes:
+                shape = 'ellipse' if isinstance(node, Data) else 'rect'
+                dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}"];\n'
+        
+        # Add edges
+        for node, connected_nodes in dag.items():
+            for connected_node in connected_nodes:
+                dot_string += f'    {node.ID} -> {connected_node.ID};\n'
+        
+        dot_string += '}'
+
+        # Create a Source object and display the graph
+        source = Source(dot_string)
+        source.view()
