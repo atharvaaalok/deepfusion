@@ -38,20 +38,9 @@ for layer in range(1, layer_count + 1):
 
     z2 = Data(ID = f'z2_{layer}', shape = (10, 1))
     matmul = MatMul(ID = f'MatMul2_{layer}', inputs = [a1], output = z2)
-
-    if layer == 1:
-        # For the first layer, don't use residual block.
-        a2 = Data(ID = f'a2_{layer}', shape = (10, 1))
-        AF = Relu(ID = f'Relu2_{layer}', inputs = [z2], output = a2)
-
-        xin = a2
-        continue
-
-    z2_plus_xin = Data(ID = f'{z2.ID}_{xin.ID}_{layer}', shape = (10, 1))
-    add = Add(ID = f'Add{layer}', inputs = [z2, xin], output = z2_plus_xin)
     
     a2 = Data(ID = f'a2_{layer}', shape = (10, 1))
-    AF = Relu(ID = f'Relu2_{layer}', inputs = [z2_plus_xin], output = a2)
+    AF = Relu(ID = f'Relu2_{layer}', inputs = [z2], output = a2)
 
     xin = a2
 
