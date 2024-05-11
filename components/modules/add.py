@@ -42,5 +42,5 @@ class Add(Module):
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv += self.output.deriv
-        self.inputs[1].deriv += self.output.deriv
+        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv
+        self.inputs[1].deriv = self.inputs[1].deriv + self.output.deriv

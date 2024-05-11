@@ -42,4 +42,4 @@ class Sigmoid(Module):
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv += self.output.deriv * _sigmoid_deriv(self.inputs[0].val)
+        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv * _sigmoid_deriv(self.inputs[0].val)

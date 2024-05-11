@@ -1,13 +1,13 @@
 import numpy as np
 
-from .components.data import Data
-from .components.modules import MatMul
-from .components.modules.activation_functions import Tanh
-from .components.modules.normalizations import BatchNorm
-from .components.modules.dropout import InvertedDropout
-from .components.modules.loss_functions import Logistic
-from .components.net import Net
-from .utils.grad_check import gradient_checker
+from ..components.data import Data
+from ..components.modules import MatMul
+from ..components.modules.activation_functions import Tanh
+from ..components.modules.normalizations import BatchNorm
+from ..components.modules.dropout import InvertedDropout
+from ..components.modules.loss_functions import Logistic
+from ..components.net import Net
+from ..utils.grad_check import gradient_checker
 
 
 def f(X):

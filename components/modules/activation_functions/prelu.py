@@ -71,5 +71,5 @@ class PRelu(Module):
     @override
     def backward(self) -> None:
         x = self.inputs[0].val
-        self.inputs[0].deriv += self.output.deriv * np.where(x >= 0, 1, self.alpha.val)
-        self.alpha.deriv += np.sum(self.output.deriv * np.where(x >= 0, 0, x))
+        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv * np.where(x >= 0, 1, self.alpha.val)
+        self.alpha.deriv = self.alpha.deriv + np.sum(self.output.deriv * np.where(x >= 0, 0, x))

@@ -54,5 +54,5 @@ class CrossEntropy(Module):
         t = self.inputs[0].val
         y = self.inputs[1].val
 
-        self.inputs[0].deriv += (1 / batch_size) * (_softmax(t) - y) * self.output.deriv
-        self.inputs[1].deriv += 0
+        self.inputs[0].deriv = self.inputs[0].deriv + (1 / batch_size) * (_softmax(t) - y) * self.output.deriv
+        self.inputs[1].deriv = 0
