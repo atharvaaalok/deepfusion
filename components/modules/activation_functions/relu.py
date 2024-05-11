@@ -41,4 +41,4 @@ class Relu(Module):
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.output.deriv * np.where(self.inputs[0].val >= 0.0, 1.0, 0.0)
+        self.inputs[0].deriv += self.output.deriv * np.where(self.inputs[0].val >= 0.0, 1.0, 0.0)

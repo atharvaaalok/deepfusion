@@ -98,10 +98,10 @@ class MatMul(Module):
     
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.W.val.T @ self.output.deriv
+        self.inputs[0].deriv += self.W.val.T @ self.output.deriv
 
-        self.W.deriv = self.output.deriv @ self.inputs[0].val.T
-        self.b.deriv = np.sum(self.output.deriv, axis = 1, keepdims = True)
+        self.W.deriv += self.output.deriv @ self.inputs[0].val.T
+        self.b.deriv += np.sum(self.output.deriv, axis = 1, keepdims = True)
 
     
     def set_regularization(self, regularizer_details: dict) -> None:

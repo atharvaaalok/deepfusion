@@ -47,4 +47,4 @@ class LRelu(Module):
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.output.deriv * np.where(self.inputs[0].val >= 0, 1, self.alpha)
+        self.inputs[0].deriv += self.output.deriv * np.where(self.inputs[0].val >= 0, 1, self.alpha)

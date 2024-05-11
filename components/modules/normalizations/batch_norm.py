@@ -144,8 +144,8 @@ class BatchNorm(Module):
         X_hat = (X - mu) / np.sqrt(sigma_sq + self.epsilon)
 
         # Set derivatives for the parameters beta and gamma
-        self.beta.deriv = np.sum(out_deriv, axis = 1, keepdims = True)
-        self.gamma.deriv = np.sum(out_deriv * X_hat, axis = 1, keepdims = True)
+        self.beta.deriv += np.sum(out_deriv, axis = 1, keepdims = True)
+        self.gamma.deriv += np.sum(out_deriv * X_hat, axis = 1, keepdims = True)
 
         # Calculate derivative of loss w.r.t. X_hat
         dX_hat = self.gamma.val * out_deriv
@@ -155,7 +155,7 @@ class BatchNorm(Module):
         dX_2 = - np.mean(dX_hat, axis = 1, keepdims = True)
         dX_3 = - X_hat * np.mean(X_hat * dX_hat, axis = 1, keepdims = True)
 
-        self.inputs[0].deriv = (1 / np.sqrt(sigma_sq + self.epsilon)) * (dX_1 + dX_2 + dX_3)
+        self.inputs[0].deriv += (1 / np.sqrt(sigma_sq + self.epsilon)) * (dX_1 + dX_2 + dX_3)
     
 
     def set_mode(self, mode: str) -> None:
