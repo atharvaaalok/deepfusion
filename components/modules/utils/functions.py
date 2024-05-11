@@ -12,6 +12,9 @@ def _sigmoid(x: npt.NDArray) -> npt.NDArray:
     
     Args:
         x: Input tensor for which the function is to be applied element-wise.
+    
+    Returns:
+        npt.NDArray: Tensor of the same shape as x, containing the sigmoid-transformed values.
     """
 
     def _positive_sigmoid(x):
@@ -41,6 +44,9 @@ def _sigmoid_deriv(x: npt.NDArray) -> npt.NDArray:
     
     Args:
         x: Input tensor at which the derivative of the sigmoid function is to be calculated.
+    
+    Returns:
+        npt.NDArray: Tensor of the same shape as x, containing the sigmoid derivative values.
     """
 
     sigmoid_x = _sigmoid(x)
@@ -58,6 +64,9 @@ def _tanh(x: npt.NDArray) -> npt.NDArray:
     
     Args:
         x: Input tensor for which the function is to be applied element-wise.
+    
+    Returns:
+        npt.NDArray: Tensor of the same shape as x, containing the tanh-transformed values.
     """
 
     def _positive_tanh(x):
@@ -89,7 +98,30 @@ def _tanh_deriv(x: npt.NDArray) -> npt.NDArray:
     
     Args:
         x: Input tensor at which the derivative of the tanh function is to be calculated.
+    
+    Returns:
+        npt.NDArray: Tensor of the same shape as x, containing the tanh derivative values.
     """
 
     tanh_x = _tanh(x)
     return 1 - tanh_x ** 2
+
+
+
+# Softmax function
+def _softmax(x: npt.NDArray) -> npt.NDArray:
+    """Softmax function that given an input vector X computes y_i = exp(x_i) / (sum(exp(x_j))).
+    
+    Args:
+        x: Input tensor for which the function is to be applied element-wise.
+    
+    Returns:
+        npt.NDArray: Tensor of the same shape as x, containing the softmax-transformed values.
+    """
+
+    # Subtract the maximum value of each column in x to prevent overflow when calculating exp(x)
+    x = x - np.max(x, axis = 0, keepdims = True)
+    exp_x = np.exp(x)
+    softmax_x = exp_x / np.sum(exp_x, axis = 0, keepdims = True)
+
+    return softmax_x
