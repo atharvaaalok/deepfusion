@@ -31,6 +31,12 @@ class Logistic(Module):
 
 
     def __init__(self, ID: str, inputs: list[Data], output: Data) -> None:
+
+        # Go through checks first
+        assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
+            'For Logistic both input shapes should be (1, 1).'
+        assert output.shape == (1, 1), 'For Logistic output shape should be (1, 1).'
+
         super().__init__(ID, inputs, output)
     
 
