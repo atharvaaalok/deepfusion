@@ -66,6 +66,10 @@ class BatchNorm(Module):
         """Initializes Batch Normalization module based on ID, inputs, output and other optional
         parameters."""
 
+        # Go through checks first
+        assert inputs[0].shape == output.shape, \
+            'For BatchNorm input and output shape should be same.'
+
         # Define the parameters gamma and beta associated with the module
         gamma_shape = output.shape
         beta_shape = output.shape
