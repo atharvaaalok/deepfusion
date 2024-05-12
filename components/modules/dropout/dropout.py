@@ -38,6 +38,9 @@ class Dropout(Module):
     def __init__(self, ID: str, inputs: list[Data], output: Data, p_keep: float = 0.5) -> None:
         """Initialize the Dropout module based on ID, inputs, output and optional parameters."""
 
+        # Go through checks first
+        assert inputs[0].shape == output.shape, 'For Dropout input and output shape should be same.'
+
         super().__init__(ID, inputs, output)
 
         # Works differently in train and test mode. Maintain state to use appropriate values
