@@ -49,6 +49,9 @@ class ELU(Module):
         """Initializes the ELU module based on ID, inputs, output, initial value for alpha and other
         optional parameters."""
 
+        # Go through checks first
+        assert inputs[0].shape == output.shape, 'For ELU input and output shape should be same.'
+        
         self.alpha = Data(ID = ID + '_alpha',
                           shape = (),
                           val = np.array(alpha),

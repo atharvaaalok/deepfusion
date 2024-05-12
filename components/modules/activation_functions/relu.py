@@ -31,6 +31,10 @@ class Relu(Module):
 
     def __init__(self, ID: str, inputs: list[Data], output: Data) -> None:
         """Initializes the Relu module based on ID, inputs and output."""
+
+        # Go through checks first
+        assert inputs[0].shape == output.shape, 'For Relu input and output shape should be same.'
+
         super().__init__(ID, inputs, output)
     
 

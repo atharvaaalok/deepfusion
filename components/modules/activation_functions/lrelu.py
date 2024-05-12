@@ -34,6 +34,10 @@ class LRelu(Module):
 
     def __init__(self, ID: str, inputs: list[Data], output: Data, alpha: float = 0.01) -> None:
         """Initializes the LRelu module based on ID, inputs, output and hyperparameter alpha."""
+
+        # Go through checks first
+        assert inputs[0].shape == output.shape, 'For LRelu input and output shape should be same.'
+
         super().__init__(ID, inputs, output)
 
         self.alpha = alpha
