@@ -67,9 +67,12 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
         # Get the next index at which to calculate numeric gradient
         iter_x.iternext()
     
-    # Calculate relative error for each value of x
-    rel_error = (np.abs(analytic_grad - numeric_grad) /
-                 np.maximum(np.abs(analytic_grad), np.abs(numeric_grad)))
+    # Calculate relative error for each value of x, take care of corner case when both are 0
+    idx = (analytic_grad == 0) & (numeric_grad == 0)
+    rel_error = np.ones(numeric_grad.shape)
+    rel_error[idx] = 0
+    rel_error[~idx] = (np.abs(analytic_grad[~idx] - numeric_grad[~idx]) /
+                          np.maximum(np.abs(analytic_grad[~idx]), np.abs(numeric_grad[~idx])))
     
     # Print gradients and errors
     print('\nAnalytic gradient\n', analytic_grad)
