@@ -91,6 +91,7 @@ class Conv2D(Module):
         # Define the filter parameters associated with the Conv2D module
         parameter_list = []
         F_shape = (D_in, filter_size, filter_size)
+        self.F_list = []
         for i in range(filter_count):
             F = Data(ID = ID + f'_F{i}',
                         shape = F_shape,
@@ -98,7 +99,18 @@ class Conv2D(Module):
                         is_frozen = is_frozen,
                         optimizer_details = optimizer_details)
             
+            self.F_list.append(F)
             parameter_list.append(F)
+        
+        # Define the bias parameter
+        b_shape = (filter_count, 1)
+        self.b = Data(ID = ID + '_b',
+                      shape = b_shape,
+                      val = np.arange(filter_count).reshape(filter_count, 1) * 1.0,
+                      is_frozen = is_frozen,
+                      optimizer_details = optimizer_details)
+        
+        parameter_list.append(self.b)
 
         super().__init__(ID, inputs, output, parameter_list = parameter_list,
                          learning_rate = learning_rate, is_frozen = is_frozen,
@@ -135,7 +147,7 @@ class Conv2D(Module):
 
         # Create the F_flat matrix
         Fi_flat_list = []
-        for F in self.parameter_list:
+        for F in self.F_list:
             Fi = F.val
             Fi_flat = Fi.reshape(1, -1)
             Fi_flat_list.append(Fi_flat)
@@ -146,6 +158,9 @@ class Conv2D(Module):
         o = (H_in + 2 * self.padding - self.filter_size) // self.stride + 1
         # Compute the convolution
         conv_flat = np.einsum('il,jlk->jik', F_flat, X_flat)
+
+        # Add bias
+        conv_flat += self.b.val
 
         # Reshape the flattened convolution into a 4D matrix of appropriate dimensions
         conv_shaped = conv_flat.reshape(-1, self.filter_count, o, o)
@@ -169,12 +184,15 @@ class Conv2D(Module):
         # Reshape it to the dimensions of conv_flat as in the forward pass
         conv_flat_deriv = conv_deriv_shaped.reshape(*self.cache['conv_flat_shape'])
 
+        # Bias derivative
+        self.b.deriv = np.sum(conv_flat_deriv, axis = (0, 2)).reshape(-1, 1)
+
         # Filter derivatives
         # Find derivative of the loss w.r.t. the F_flat matrix used in forward pass
         F_flat_deriv = np.einsum('ebg,eag->ab', self.cache['X_flat'], conv_flat_deriv)
         # Get derivative for each filter
         for i in range(self.filter_count):
-            self.parameter_list[i].deriv = F_flat_deriv[i].reshape(self.cache['F_shape'])
+            self.F_list[i].deriv = F_flat_deriv[i].reshape(self.cache['F_shape'])
         
 
         # Input derivatives
@@ -198,7 +216,7 @@ class Conv2D(Module):
         """
         self.is_regularized = True
         self.regularizer_details = regularizer_details
-        for F in self.parameter_list:
+        for F in self.F_list:
             F.set_regularization(regularizer_details)
 
 

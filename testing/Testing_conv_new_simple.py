@@ -1,7 +1,7 @@
 import numpy as np
 
 from ..components.data import Data
-from ..components.modules.conv2d_new import Conv2D
+from ..components.modules import Conv2D
 from ..components.modules.loss_functions import SumLoss
 from ..components.net import Net
 from ..utils.grad_check import gradient_checker
@@ -85,4 +85,4 @@ print(z.val)
 net.backward()
 print(x.deriv.shape)
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-6)
+gradient_checker(net = net, data_obj = conv.b, loss_obj = loss, h = 1e-6)

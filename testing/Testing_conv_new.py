@@ -53,4 +53,4 @@ net.forward()
 net.backward()
 print(x.deriv.shape)
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-6)
+gradient_checker(net = net, data_obj = conv.b, loss_obj = loss, h = 1e-6)
