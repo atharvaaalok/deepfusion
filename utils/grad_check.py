@@ -14,6 +14,9 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
         h: The step size used in calculating the value of the gradient.
     """
 
+    # Clear any residual gradients before performing any operations
+    net.clear_grads()
+
     # Determine if the data_obj is a data node or is a parameter inside a module
     if data_obj in net.topological_order:
         data_node = True
