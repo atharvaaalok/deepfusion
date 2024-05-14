@@ -1,10 +1,10 @@
 import numpy as np
 
-from .components.data import Data
-from .components.modules import MatMul
-from .components.modules.loss_functions.sum_loss import SumLoss
-from .components.net import Net
-from .utils.grad_check import gradient_checker
+from ..components.data import Data
+from ..components.modules import MatMul
+from ..components.modules.loss_functions.sum_loss import SumLoss
+from ..components.net import Net
+from ..utils.grad_check import gradient_checker
 
 
 def f(X):

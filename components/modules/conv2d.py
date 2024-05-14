@@ -8,7 +8,7 @@ from ..optimizers import DEFAULT_OPTIMIZER_DETAILS
 
 class Conv2D(Module):
     """Convolution 2D module that given an input X and a defined filter size and filter count
-    produces an activation map via convolving the filter on the input.
+    produces an activation map via convolving the filters on the input.
 
     Attributes:
         ID:
@@ -72,14 +72,16 @@ class Conv2D(Module):
         
 
         # Define the filter parameters associated with the Conv2D module
+        parameter_list = []
         F_shape = (D_in, filter_size, filter_size)
-        self.F = Data(ID = ID + '_F',
-                      shape = F_shape,
-                      val = np.random.randn(*F_shape) * 0.01,
-                      is_frozen = is_frozen,
-                      optimizer_details = optimizer_details)
-
-        parameter_list = [self.F]
+        for i in range(filter_count):
+            F = Data(ID = ID + f'_F{i}',
+                        shape = F_shape,
+                        val = np.random.randn(*F_shape) * 0.01,
+                        is_frozen = is_frozen,
+                        optimizer_details = optimizer_details)
+            
+            parameter_list.append(F)
 
         super().__init__(ID, inputs, output, parameter_list = parameter_list,
                          learning_rate = learning_rate, is_frozen = is_frozen,
@@ -91,77 +93,126 @@ class Conv2D(Module):
         self.padding = padding
         self.stride = stride
 
+        # Maintain cache for values used in forward pass that will be used in backward pass also
+        self.cache = {'X_flat': np.array(0), 'F_flat': np.array(0), 'X_shape': (), 'F_shape': (),
+                      'conv_flat_shape': (), 'batch_size': 0}
+
 
     @override
     def forward(self) -> None:
-        D_in, H_in, W_in, batch_size = self.inputs[0].val.shape
+        batch_size, D_in, H_in, W_in = self.inputs[0].val.shape
 
-        # Convolve the filter over each input in the mini batch
+        F_shape = (D_in, self.filter_size, self.filter_size)
+        X_shape = (D_in, H_in, W_in)
+
+        # Create the X_flat matrix
+        Xi_flat_list = []
         for m in range(batch_size):
             # Get input
-            X = self.inputs[0].val[..., m]
-            # Convolve the filter and get the activation map
-            conv = _conv2D(X, self.F.val, padding = self.padding, stride = self.stride)
+            Xi = self.inputs[0].val[m]
+            # Flatten Xi
+            Xi_flat = im2col(Xi, self.filter_size, self.padding, self.stride)
+            Xi_flat_list.append(Xi_flat)
         
-        self.output.val = conv[..., np.newaxis]
+        X_flat = np.stack(Xi_flat_list, axis = 0)
+
+        # Create the F_flat matrix
+        Fi_flat_list = []
+        for F in self.parameter_list:
+            Fi = F.val
+            Fi_flat = Fi.reshape(1, -1)
+            Fi_flat_list.append(Fi_flat)
+        
+        F_flat = np.vstack(Fi_flat_list)
+
+        # Compute the output height and width
+        o = (H_in + 2 * self.padding - self.filter_size) // self.stride + 1
+        # Compute the convolution
+        conv_flat = np.einsum('il,jlk->jik', F_flat, X_flat)
+
+        # Reshape the flattened convolution into a 4D matrix of appropriate dimensions
+        conv_shaped = conv_flat.reshape(-1, self.filter_count, o, o)
+
+        # Update the output value
+        self.output.val = conv_shaped
+
+        # Cache useful values to be used in backward pass
+        self.cache['conv_flat_shape'] = conv_flat.shape
+        self.cache['X_flat'] = X_flat
+        self.cache['F_flat'] = F_flat
+        self.cache['X_shape'] = X_shape
+        self.cache['F_shape'] = F_shape
+        self.cache['batch_size'] = batch_size
 
 
     @override
     def backward(self) -> None:
-        D_in, H_in, W_in, batch_size = self.inputs[0].val.shape
+        # Get the 4D derivative of the loss w.r.t. output
+        conv_deriv_shaped = self.output.deriv
+        # Reshape it to the dimensions of conv_flat as in the forward pass
+        conv_flat_deriv = conv_deriv_shaped.reshape(*self.cache['conv_flat_shape'])
 
-        # Get derivative w.r.t. input and filter for each input in the mini batch
-        for m in range(batch_size):
-            # Get input
-            X = self.inputs[0].val[..., m]
-
-            # Get output deriv
-            out_deriv = self.output.deriv[..., 0]
-
-            # Get derivative w.r.t. filter
-            self.F.deriv = _conv2D(X, _dilate(out_deriv, dilation = self.stride - 1), padding = self.padding, stride = 1)
-
-            # Get derivative w.r.t. input
-            F_rotate = np.flip(self.F.val, axis = (1, 2))
-            X_deriv = _conv2D(_dilate(out_deriv, dilation = self.stride - 1), F_rotate, padding = F_rotate.shape[1] - 1, stride = 1)
-            X_deriv = X_deriv[:, self.padding: self.padding + H_in, self.padding: self.padding + H_in]
-            self.inputs[0].deriv = X_deriv[..., np.newaxis]
-
-
-def _conv2D(X, F, padding, stride):
-        # Pad the input
-        X = X[0, :, :]
-        X = np.pad(X, padding)
-        X = X[np.newaxis, :, :]
-
-        # Determine output size
-        D, H, W = X.shape
-        filter_size = F.shape[1]
-        o = (H - filter_size) // stride + 1
-        conv = np.zeros((1, o, o))
-
-        for i in range(o):
-            for j in range(o):
-                idx_i, idx_j = i * stride, j * stride
-                X_patch = X[:, idx_i: idx_i + filter_size, idx_j: idx_j + filter_size]
-                conv[0, i, j] = np.sum(X_patch * F)
+        # Filter derivatives
+        # Find derivative of the loss w.r.t. the F_flat matrix used in forward pass
+        F_flat_deriv = np.einsum('ebg,eag->ab', self.cache['X_flat'], conv_flat_deriv)
+        # Get derivative for each filter
+        for i in range(self.filter_count):
+            self.parameter_list[i].deriv = F_flat_deriv[i].reshape(self.cache['F_shape'])
         
-        return conv
+
+        # Input derivatives
+        # Find derivative of the loss w.r.t. the X_flat tensor used in foward pass
+        X_flat_deriv = np.einsum('fb,afc->abc', self.cache['F_flat'], conv_flat_deriv)
+        # Get derivative for each training example
+        Xi_deriv_list = []
+        for i in range(self.cache['batch_size']):
+            deriv = col2im(X_flat_deriv[i], self.cache['X_shape'], self.filter_size, self.padding, self.stride)
+            Xi_deriv_list.append(deriv)
+        
+        self.inputs[0].deriv = np.stack(Xi_deriv_list, axis = 0)
 
 
-def _dilate(X, dilation):
+
+def im2col(X, filter_size, padding, stride):
+    # Pad the input
+    X = np.pad(X, pad_width = ((0, 0), (padding, padding), (padding, padding)))
+
+    # Determine the output size
     D, H, W = X.shape
+    # Padding has already been added to X
+    o = (H - filter_size) // stride + 1
 
-    # New dimensions for rows and columns
-    H_new = H + (H - 1) * dilation
-    W_new = W + (W - 1) * dilation
+    X_flat = np.zeros((filter_size * filter_size * D, o * o))
 
-    # Create array of dilated shape filled with zeros
-    X_dilated = np.zeros((D, H_new, W_new))
-
-    # Process each depth slice
-    for d in range(D):
-        # Fill elements of X into X_dilated at the appropriate locations
-        X_dilated[d, 0: H_new: dilation + 1, 0: W_new: dilation + 1] = X[d, :, :]
+    col = 0
+    for i in range(o):
+        for j in range(o):
+            idx_i, idx_j = i * stride, j * stride
+            X_patch = X[:, idx_i: idx_i + filter_size, idx_j: idx_j + filter_size]
+            X_flat[:, col: col + 1] = X_patch.reshape(-1, 1)
+            col += 1
     
-    return X_dilated
+    return X_flat
+
+
+def col2im(X_deriv_flat, X_shape, filter_size, padding, stride):
+    D, H, W = X_shape
+
+    # Set the derivative size
+    X_deriv = np.zeros((D, H + 2 * padding, W + 2 * padding))
+
+    o = (H + 2 * padding - filter_size) // stride + 1
+
+    col = 0
+    for i in range(o):
+        for j in range(o):
+            idx_i, idx_j = i * stride, j * stride
+            X_deriv_flat_col = X_deriv_flat[:, col: col + 1]
+            X_deriv_flat_col_shaped = X_deriv_flat_col.reshape(D, filter_size, filter_size)
+            X_deriv[:, idx_i: idx_i + filter_size, idx_j: idx_j + filter_size] += X_deriv_flat_col_shaped
+            col += 1
+    
+    # Remove derivatives introduced due to padded 0s
+    X_deriv = X_deriv[:, padding: padding + H, padding: padding + W]
+    
+    return X_deriv

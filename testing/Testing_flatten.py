@@ -1,10 +1,10 @@
 import numpy as np
 
-from .components.data import Data
-from .components.modules import Flatten
-from .components.modules.loss_functions import SumLoss
-from .components.net import Net
-from .utils.grad_check import gradient_checker
+from ..components.data import Data
+from ..components.modules import Flatten
+from ..components.modules.loss_functions import SumLoss
+from ..components.net import Net
+from ..utils.grad_check import gradient_checker
 
 
 np.set_printoptions(linewidth = np.inf)
