@@ -106,7 +106,7 @@ class Conv2D(Module):
         b_shape = (filter_count, 1)
         self.b = Data(ID = ID + '_b',
                       shape = b_shape,
-                      val = np.arange(filter_count).reshape(filter_count, 1) * 1.0,
+                      val = np.zeros(b_shape),
                       is_frozen = is_frozen,
                       optimizer_details = optimizer_details)
         
