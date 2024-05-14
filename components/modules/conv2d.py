@@ -59,6 +59,7 @@ class Conv2D(Module):
         optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS,
         is_regularized: bool = False,
         regularizer_details: Optional[dict] = None,
+        weight_init_type: str = 'He',
     ) -> None:
         """Initializes Conv2D module based on ID, inputs, output, filter size, filter count and
         other optional parameters.
@@ -93,7 +94,7 @@ class Conv2D(Module):
         for i in range(filter_count):
             F = Data(ID = ID + f'_F{i}',
                         shape = F_shape,
-                        val = np.random.randn(*F_shape) * 0.01,
+                        val = _weight_initialization(weight_init_type, F_shape),
                         is_frozen = is_frozen,
                         optimizer_details = optimizer_details)
             
@@ -245,3 +246,45 @@ def col2im(X_deriv_flat, X_shape, filter_size, padding, stride):
     X_deriv = X_deriv[:, padding: padding + H, padding: padding + W]
     
     return X_deriv
+
+
+def _weight_initialization(weight_init_type: str, W_shape: tuple[int, int, int]) -> None:
+    """Utility function to initialize and return a weight matrix based on specified initialization
+    method.
+
+    Args:
+        weight_init_type: String chosen from the available initialization choices.
+        W_shape: Shape of the weight matrix to be initialized.
+
+    Raises:
+        ValueError: If the specified weight initialization method is not available.
+    """
+    
+    available_init = ['Zero', 'Random', 'Xavier', 'He', 'Sparse']
+
+    match weight_init_type:
+        case 'Zero':
+            return np.zeros(W_shape)
+        
+        case 'Random':
+            return np.random.randn(*W_shape) * 0.01
+        
+        case 'Xavier':
+            return np.random.randn(*W_shape) * np.sqrt(1 / (np.prod(W_shape)))
+        
+        case 'He':
+            return np.random.randn(*W_shape) * np.sqrt(2 / (np.prod(W_shape)))
+        
+        case 'Sparse':
+            sparsity = 0.1
+            weights = np.zeros(W_shape)
+            total_weights = np.prod(W_shape)
+            non_zero_count = int(total_weights * sparsity)
+            non_zero_indices = np.random.choice(total_weights, non_zero_count, replace = False)
+            non_zero_values = 0.01 * np.random.randn(non_zero_count)
+            np.put(weights, non_zero_indices, non_zero_values)
+            return weights
+        
+        case _:
+            raise ValueError('Specified initialization method not available.' \
+                             f' Choose from - {available_init}')
