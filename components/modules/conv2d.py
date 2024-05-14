@@ -1,5 +1,5 @@
 import numpy as np
-from typing import override
+from typing import Optional, override
 
 from .module import Module
 from ..data.data import Data
@@ -27,6 +27,10 @@ class Conv2D(Module):
         optimizer_details:
             Dictionary containing name of the optimizer and a dictionary of its associated
             hyperparameters.
+        is_regularized:
+            Boolean that decides if the weight parameter for the module is regularized.
+        regularizer_details:
+            Dictionary containing the regularization strength and the regularizer name.
         filter_size:
             Height and width of the filter that is convolved over the input.
         filter_count:
@@ -53,9 +57,21 @@ class Conv2D(Module):
         learning_rate: float = 1e-6,
         is_frozen: bool = False,
         optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS,
+        is_regularized: bool = False,
+        regularizer_details: Optional[dict] = None,
     ) -> None:
         """Initializes Conv2D module based on ID, inputs, output, filter size, filter count and
-        other optional parameters."""
+        other optional parameters.
+
+        Raises:
+            ValueError: If data is regularized but regularizer details are not provided.
+        """
+
+        if is_regularized and regularizer_details is None:
+            raise ValueError('If Module is regularized, regularizer details must be provided.')
+
+        self.is_regularized = is_regularized
+        self.regularizer_details = regularizer_details if is_regularized else None
 
         # Get input and output dimensions
         D_in, H_in, W_in = inputs[0].shape
@@ -170,6 +186,19 @@ class Conv2D(Module):
             Xi_deriv_list.append(deriv)
         
         self.inputs[0].deriv = np.stack(Xi_deriv_list, axis = 0)
+    
+
+    def set_regularization(self, regularizer_details: dict) -> None:
+        """Regularize appropriate parameters of the module using specified regularization strength
+        and function.
+        
+        Args:
+            regularizer_details: Dictionary with regularizer strength and function name.
+        """
+        self.is_regularized = True
+        self.regularizer_details = regularizer_details
+        for F in self.parameter_list:
+            F.set_regularization(regularizer_details)
 
 
 
