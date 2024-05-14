@@ -57,7 +57,7 @@ class Conv2D(Module):
         """Initializes Conv2D module based on ID, inputs, output, filter size, filter count and
         other optional parameters."""
 
-        # Get input dimensions
+        # Get input and output dimensions
         D_in, H_in, W_in = inputs[0].shape
         D_out, H_out, W_out = output.shape
 
