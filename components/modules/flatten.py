@@ -6,8 +6,8 @@ from ..data.data import Data
 
 
 class Flatten(Module):
-    """Flatten takes any tensor of shape (a, b, c, ..., m) where m is batch size and converts it
-    into a 2D matrix of size (a * b * c * ..., m).
+    """Flatten takes any tensor of shape (m, a, b, c, ...) where m is batch size and converts it
+    into a 2D matrix of size (m, a * b * c * ...).
 
     Attributes:
         ID:
@@ -35,7 +35,7 @@ class Flatten(Module):
 
         # Go through checks first
         total_input_elements = np.prod(inputs[0].shape)
-        total_output_elements = output.shape[0]
+        total_output_elements = output.shape[1]
         assert total_input_elements == total_output_elements, \
             'For Flatten module the total elements in input should equal the total output elements.'
 
@@ -44,11 +44,11 @@ class Flatten(Module):
 
     @override
     def forward(self) -> None:
-        batch_size = self.inputs[0].val.shape[-1]
+        batch_size = self.inputs[0].val.shape[0]
 
-        # Flatten the input into a 2D matrix of size (dim1, m) where dim1 is no. of elements in
+        # Flatten the input into a 2D matrix of size (m, dim1) where dim1 is no. of elements in
         # each training example and m is the batch size
-        self.output.val = self.inputs[0].val.reshape(-1, batch_size)
+        self.output.val = self.inputs[0].val.reshape(batch_size, -1)
 
 
     @override
