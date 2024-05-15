@@ -1,4 +1,6 @@
-import numpy as np
+from ....utils.backend import Backend
+np = Backend.get_array_module()
+
 from typing import override
 
 from ..module import Module

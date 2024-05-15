@@ -1,4 +1,5 @@
-import numpy as np
+from .backend import Backend
+np = Backend.get_array_module()
 
 from ..components.net import Net
 from ..components.data import Data

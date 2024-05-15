@@ -1,7 +1,9 @@
 from .optimizer import Optimizer
 from typing import override
 import numpy.typing as npt
-import numpy as np
+
+from ...utils.backend import Backend
+np = Backend.get_array_module()
 
 
 class RMSprop(Optimizer):
