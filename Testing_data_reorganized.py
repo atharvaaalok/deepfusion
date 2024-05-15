@@ -1,18 +1,15 @@
 import numpy as np
 
 from .components.data import Data
+from .components.modules import MatMul
 from .components.modules.activation_functions import Relu
 from .components.modules.loss_functions import MSE
 from .components.net import Net
 from .utils.grad_check import gradient_checker
 
 
-# def f(X):
-#     Y = X[:, 0:1] + 2 * X[:, 1:2] ** 2 + 3 * X[:, 2:3] ** 0.5
-#     return Y
-
 def f(X):
-    Y = 2 * X[:, 0:1] ** 2
+    Y = X[:, 0:1] + 2 * X[:, 1:2] ** 2 + 3 * X[:, 2:3] ** 0.5
     return Y
 
 
@@ -23,7 +20,7 @@ np.random.seed(0)
 # Generate training data
 m_train = 4
 factor = 5
-X_train = np.random.rand(m_train, 1) * factor
+X_train = np.random.rand(m_train, 3) * factor
 Y_train = f(X_train)
 
 
@@ -31,11 +28,11 @@ Y_train = f(X_train)
 ActF = Relu
 LossF = MSE
 
-x = Data(ID = 'x', shape = (1, 1))
+x = Data(ID = 'x', shape = (1, 3))
 inputs = [x]
 
 z = Data(ID = 'z', shape = (1, 1))
-act_f = ActF(ID = 'ActF', inputs = inputs, output = z)
+matmul = MatMul(ID = 'ActF', inputs = inputs, output = z)
 
 # Initialize target variable, loss variable and attach loss function
 y = Data(ID = 'y', shape = (1, 1))
@@ -54,10 +51,6 @@ y.val = Y_train
 # Run network forward pass
 net.forward()
 
-print(x.val)
-print(z.val)
-print(loss.val)
-
 
 # Perform gradient checking
-gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-5)
+gradient_checker(net = net, data_obj = matmul.W, loss_obj = loss, h = 1e-5)

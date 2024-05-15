@@ -67,7 +67,7 @@ class MatMul(Module):
         self.regularizer_details = regularizer_details if is_regularized else None
         
         # Define the weight (W) and bias (b) parameters associated with the MatMul module
-        W_shape = (output.shape[0], inputs[0].shape[0])
+        W_shape = (inputs[0].shape[1], output.shape[1])
         b_shape = (output.shape)
         self.W = Data(ID = ID + '_W',
                       shape = W_shape,
@@ -92,16 +92,16 @@ class MatMul(Module):
 
     @override
     def forward(self) -> None:
-        # Output = WX + b
-        self.output.val = self.W.val @ self.inputs[0].val + self.b.val
+        # Output = XW + b
+        self.output.val = self.inputs[0].val @ self.W.val + self.b.val
 
     
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.inputs[0].deriv + self.W.val.T @ self.output.deriv
+        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv @ self.W.val.T
 
-        self.W.deriv = self.W.deriv + self.output.deriv @ self.inputs[0].val.T
-        self.b.deriv = self.b.deriv + np.sum(self.output.deriv, axis = 1, keepdims = True)
+        self.W.deriv = self.W.deriv + self.inputs[0].val.T @ self.output.deriv
+        self.b.deriv = self.b.deriv + np.sum(self.output.deriv, axis = 0, keepdims = True)
 
     
     def set_regularization(self, regularizer_details: dict) -> None:
@@ -138,10 +138,10 @@ def _weight_initialization(weight_init_type: str, W_shape: tuple[int, int]) -> N
             return np.random.randn(*W_shape) * 0.01
         
         case 'Xavier':
-            return np.random.randn(*W_shape) * np.sqrt(1 / W_shape[1])
+            return np.random.randn(*W_shape) * np.sqrt(1 / W_shape[0])
         
         case 'He':
-            return np.random.randn(*W_shape) * np.sqrt(2 / W_shape[1])
+            return np.random.randn(*W_shape) * np.sqrt(2 / W_shape[0])
         
         case 'Sparse':
             sparsity = 0.1
