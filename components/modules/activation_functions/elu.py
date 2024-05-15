@@ -68,7 +68,7 @@ class ELU(Module):
     @override
     def forward(self) -> None:
         x = self.inputs[0].val
-        self.output.val = np.where(x >= 0, x, self.alpha.val * (np.exp(x) - 1))
+        self.output.val = np.where(x >= 0.0, x, self.alpha.val * (np.exp(x) - 1.0))
     
 
     @override
@@ -77,5 +77,5 @@ class ELU(Module):
         exp_x = np.exp(x)
         out_deriv = self.output.deriv
 
-        self.inputs[0].deriv = self.inputs[0].deriv + out_deriv * np.where(x >= 0, 1, self.alpha.val * exp_x)
-        self.alpha.deriv = self.alpha.deriv + np.sum(out_deriv * np.where(x >= 0, 0, (exp_x - 1)))
+        self.inputs[0].deriv = self.inputs[0].deriv + out_deriv * np.where(x >= 0.0, 1.0, self.alpha.val * exp_x)
+        self.alpha.deriv = self.alpha.deriv + np.sum(out_deriv * np.where(x >= 0.0, 0.0, (exp_x - 1.0)))

@@ -46,9 +46,9 @@ class LRelu(Module):
     @override
     def forward(self) -> None:
         x = self.inputs[0].val
-        self.output.val = np.where(x >= 0, x, self.alpha * x)
+        self.output.val = np.where(x >= 0.0, x, self.alpha * x)
     
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv * np.where(self.inputs[0].val >= 0, 1, self.alpha)
+        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv * np.where(self.inputs[0].val >= 0.0, 1.0, self.alpha)
