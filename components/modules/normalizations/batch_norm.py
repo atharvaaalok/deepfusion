@@ -111,8 +111,8 @@ class BatchNorm(Module):
 
         if self.mode == 'train':
             # Calculate mean and variance across the batch for each feature separately
-            mu = np.mean(X, axis = 1, keepdims = True)
-            sigma_sq = np.var(X, axis = 1, keepdims = True)
+            mu = np.mean(X, axis = 0, keepdims = True)
+            sigma_sq = np.var(X, axis = 0, keepdims = True)
 
             # Cache mu and sigma_sq
             self.cache['mu'] = mu
@@ -148,16 +148,16 @@ class BatchNorm(Module):
         X_hat = (X - mu) / np.sqrt(sigma_sq + self.epsilon)
 
         # Set derivatives for the parameters beta and gamma
-        self.beta.deriv = self.beta.deriv + np.sum(out_deriv, axis = 1, keepdims = True)
-        self.gamma.deriv = self.gamma.deriv + np.sum(out_deriv * X_hat, axis = 1, keepdims = True)
+        self.beta.deriv = self.beta.deriv + np.sum(out_deriv, axis = 0, keepdims = True)
+        self.gamma.deriv = self.gamma.deriv + np.sum(out_deriv * X_hat, axis = 0, keepdims = True)
 
         # Calculate derivative of loss w.r.t. X_hat
         dX_hat = self.gamma.val * out_deriv
 
         # Compute derivative of loss w.r.t. input X, which is sum of 3 parts
         dX_1 = dX_hat
-        dX_2 = - np.mean(dX_hat, axis = 1, keepdims = True)
-        dX_3 = - X_hat * np.mean(X_hat * dX_hat, axis = 1, keepdims = True)
+        dX_2 = - np.mean(dX_hat, axis = 0, keepdims = True)
+        dX_3 = - X_hat * np.mean(X_hat * dX_hat, axis = 0, keepdims = True)
 
         self.inputs[0].deriv = self.inputs[0].deriv + (1 / np.sqrt(sigma_sq + self.epsilon)) * (dX_1 + dX_2 + dX_3)
     

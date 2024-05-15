@@ -2,7 +2,8 @@ import numpy as np
 
 from .components.data import Data
 from .components.modules import MatMul
-from .components.modules.activation_functions import Relu
+from .components.modules.activation_functions import Tanh
+from .components.modules.normalizations import BatchNorm
 from .components.modules.loss_functions import MSE
 from .components.net import Net
 from .utils.grad_check import gradient_checker
@@ -25,19 +26,24 @@ Y_train = f(X_train)
 
 
 # Construct neural network
-ActF = Relu
+ActF = Tanh
 LossF = MSE
+Norm = BatchNorm
+weight_init_type = 'Random'
 
 x = Data(ID = 'x', shape = (1, 3))
 inputs = [x]
 
-layer_count = 3
+layer_count = 1
 for layer in range(1, layer_count + 1):
     z = Data(ID = f'z{layer}', shape = (1, 10))
-    matmul = MatMul(ID = f'Matmul{layer}', inputs = inputs, output = z)
+    matmul = MatMul(ID = f'Matmul{layer}', inputs = inputs, output = z, weight_init_type = weight_init_type)
 
     a = Data(ID = f'a{layer}', shape = (1, 10))
     AF = ActF(ID = f'ActF{layer}', inputs = [z], output = a)
+
+    # a_norm = Data(ID = f'a_norm{layer}', shape = (1, 10))
+    # norm = Norm(ID = f'Norm{layer}', inputs = [a], output = a_norm)
 
     inputs = [a]
 
@@ -53,6 +59,14 @@ sum_loss = LossF(ID = 'LossF', inputs = [z, y], output = loss)
 
 # Initialize neural network
 net = Net(ID = 'Net', root_nodes = [loss])
+
+
+# # Set required values
+# x.val = X_train
+# y.val = Y_train
+
+
+# gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-6)
 
 
 # Train neural network
