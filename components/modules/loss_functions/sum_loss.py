@@ -32,7 +32,7 @@ class SumLoss(Module):
     def __init__(self, ID: str, inputs: list[Data], output: Data) -> None:
 
         # Go through the checks first
-        assert output.shape == (), 'For Sum loss module output shape should be empty tuple ().'
+        assert output.shape == (1, 1), 'For Sum loss module output shape should be (1, 1).'
 
         super().__init__(ID, inputs, output)
     

@@ -35,7 +35,7 @@ class CrossEntropy(Module):
         # Go through checks first
         assert inputs[0].shape == inputs[1].shape, \
             'For Cross Entropy both input shapes should be same.'
-        assert output.shape == (), 'For Cross Entropy output shape should be empty tuple ().'
+        assert output.shape == (1, 1), 'For Cross Entropy output shape should be (1, 1).'
 
         super().__init__(ID, inputs, output)
     

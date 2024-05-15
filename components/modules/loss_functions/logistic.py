@@ -35,7 +35,7 @@ class Logistic(Module):
         # Go through checks first
         assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
             'For Logistic both input shapes should be (1, 1).'
-        assert output.shape == (), 'For Logistic output shape should be empty tuple ().'
+        assert output.shape == (1, 1), 'For Logistic output shape should be (1, 1).'
 
         super().__init__(ID, inputs, output)
     

@@ -36,7 +36,7 @@ matmul = MatMul(ID = 'ActF', inputs = inputs, output = z)
 
 # Initialize target variable, loss variable and attach loss function
 y = Data(ID = 'y', shape = (1, 1))
-loss = Data(ID = 'loss', shape = ())
+loss = Data(ID = 'loss', shape = (1, 1))
 sum_loss = LossF(ID = 'LossF', inputs = [z, y], output = loss)
 
 
