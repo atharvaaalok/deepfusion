@@ -34,14 +34,14 @@ class MSE(Module):
         # Go through checks first
         assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
             'For MSE both input shapes should be (1, 1).'
-        assert output.shape == (1, 1), 'For MSE output shape should be (1, 1).'
+        assert output.shape == (), 'For MSE output shape should be empty tuple ().'
 
         super().__init__(ID, inputs, output)
     
     
     @override
     def forward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
         self.output.val = (1 / batch_size) * (1 / 2) * np.sum((self.inputs[0].val - self.inputs[1].val) ** 2)
 
         self.output.deriv = 1.0
@@ -49,7 +49,7 @@ class MSE(Module):
 
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
 
         self.inputs[0].deriv = self.inputs[0].deriv + (1 / batch_size) * (self.inputs[0].val - self.inputs[1].val) * self.output.deriv
         self.inputs[1].deriv = self.inputs[1].deriv + (1 / batch_size) * (self.inputs[1].val - self.inputs[0].val) * self.output.deriv

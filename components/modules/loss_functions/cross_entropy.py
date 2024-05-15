@@ -35,19 +35,19 @@ class CrossEntropy(Module):
         # Go through checks first
         assert inputs[0].shape == inputs[1].shape, \
             'For Cross Entropy both input shapes should be same.'
-        assert output.shape == (1, 1), 'For Cross Entropy output shape should be (1, 1).'
+        assert output.shape == (), 'For Cross Entropy output shape should be empty tuple ().'
 
         super().__init__(ID, inputs, output)
     
 
     @override
     def forward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
 
         t = self.inputs[0].val
         y = self.inputs[1].val
 
-        cross_entropy = -np.log(np.sum(_softmax(t) * y, axis = 0, keepdims = True))
+        cross_entropy = -np.log(np.sum(_softmax(t) * y, axis = 1, keepdims = True))
         self.output.val = (1 / batch_size) * np.sum(cross_entropy)
 
         self.output.deriv = 1.0
@@ -55,7 +55,7 @@ class CrossEntropy(Module):
 
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
 
         t = self.inputs[0].val
         y = self.inputs[1].val

@@ -110,7 +110,7 @@ def _tanh_deriv(x: npt.NDArray) -> npt.NDArray:
 
 # Softmax function
 def _softmax(x: npt.NDArray) -> npt.NDArray:
-    """Softmax function that given an input vector X computes y_i = exp(x_i) / (sum(exp(x_j))).
+    """Softmax function that given an input vector X computes y_ij = exp(x_ij) / (sum_k(exp(x_ik))).
     
     Args:
         x: Input tensor for which the function is to be applied element-wise.
@@ -120,8 +120,8 @@ def _softmax(x: npt.NDArray) -> npt.NDArray:
     """
 
     # Subtract the maximum value of each column in x to prevent overflow when calculating exp(x)
-    x = x - np.max(x, axis = 0, keepdims = True)
+    x = x - np.max(x, axis = 1, keepdims = True)
     exp_x = np.exp(x)
-    softmax_x = exp_x / np.sum(exp_x, axis = 0, keepdims = True)
+    softmax_x = exp_x / np.sum(exp_x, axis = 1, keepdims = True)
 
     return softmax_x

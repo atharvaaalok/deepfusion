@@ -35,14 +35,14 @@ class Logistic(Module):
         # Go through checks first
         assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
             'For Logistic both input shapes should be (1, 1).'
-        assert output.shape == (1, 1), 'For Logistic output shape should be (1, 1).'
+        assert output.shape == (), 'For Logistic output shape should be empty tuple ().'
 
         super().__init__(ID, inputs, output)
     
 
     @override
     def forward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
 
         t = self.inputs[0].val
         y = self.inputs[1].val
@@ -53,7 +53,7 @@ class Logistic(Module):
 
     @override
     def backward(self) -> None:
-        batch_size = self.inputs[0].val.shape[1]
+        batch_size = self.inputs[0].val.shape[0]
 
         t = self.inputs[0].val
         y = self.inputs[1].val
