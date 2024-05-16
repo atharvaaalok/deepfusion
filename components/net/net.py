@@ -484,6 +484,39 @@ class Net:
     def connect(self, root_nodes: list[Data]) -> None:
         self.root_nodes = root_nodes
 
+        # Clear graphs and topological order
+        self.graph = {}
+        self.graph_visual = {}
+        self.topological_order = []
+        self.node_lookup = {}
+
+        # Recreate graph and topological order
+        self.topological_sort()
+        self.create_graph_dicts()
+        self.create_lookup()
+    
+
+    def disconnect(self, data_obj: Data, module_obj: Module) -> None:
+        """Disconnects a data object and module.
+        
+        Disconnection makes sense only for a data object which is an input to a module. The graph
+        resulting from disconnecting a module and an output data object has no use case hence that
+        is not taken care of.
+        """
+
+        if data_obj in module_obj.inputs:
+            data_obj.outputs = []
+            self.root_nodes = [data_obj]
+        else:
+            raise ValueError('Data object provided is not in the list of module inputs.')
+        
+        # Clear graphs and topological order
+        self.graph = {}
+        self.graph_visual = {}
+        self.topological_order = []
+        self.node_lookup = {}
+
+        # Recreate graph and topological order
         self.topological_sort()
         self.create_graph_dicts()
         self.create_lookup()
