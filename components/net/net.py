@@ -1,7 +1,9 @@
 from typing import Optional
+import numpy.typing as npt
 import time
 from graphviz import Source
 import matplotlib.pyplot as plt
+import pickle
 from ...utils.backend import Backend
 np = Backend.get_array_module()
 
@@ -347,10 +349,10 @@ class Net:
 
     def automate_training(
         self,
-        X_train,
-        Y_train,
-        X_val,
-        Y_val,
+        X_train: npt.NDArray,
+        Y_train: npt.NDArray,
+        X_val: npt.NDArray,
+        Y_val: npt.NDArray,
         B: int = 64,
         epochs: int = 1000,
         print_cost_every: int = 100,
@@ -448,3 +450,13 @@ class Net:
 
         plt.ioff()
         plt.show()
+    
+
+    def save(self, file_path):
+        # Check if the .df extension is already present, if not then add it
+        if file_path[-3:] != '.df':
+            file_path = file_path + '.df'
+        
+        # Save the model using pickle
+        with open(file_path, 'wb') as f:
+            pickle.dump(self, f)
