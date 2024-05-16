@@ -452,11 +452,29 @@ class Net:
         plt.show()
     
 
-    def save(self, file_path):
-        # Check if the .df extension is already present, if not then add it
-        if file_path[-3:] != '.df':
-            file_path = file_path + '.df'
+    def save(self, file_path: str) -> None:
+        file_path = Net._ensure_extension(file_path)
         
         # Save the model using pickle
         with open(file_path, 'wb') as f:
             pickle.dump(self, f)
+    
+
+    @staticmethod
+    def load(file_path: str) -> None:
+        file_path = Net._ensure_extension(file_path)
+        
+        # Save the model using pickle
+        with open(file_path, 'rb') as f:
+            net = pickle.load(f)
+        
+        return net
+    
+    
+    @staticmethod
+    def _ensure_extension(file_path: str) -> None:
+        # Check if the .df extension is already present, if not, then add it
+        if not file_path.endswith('.df'):
+            file_path += '.df'
+        
+        return file_path

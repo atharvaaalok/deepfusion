@@ -1,12 +1,18 @@
 import numpy as np
 
+from .components.net import Net
 from .data_def import generate_data
-from .net_def import net
 
+
+# Load the pre-trained model
+file_path = 'deepfusion/First_model'
+net = Net.load(file_path)
+
+
+# Train the model further
 
 np.set_printoptions(linewidth = np.inf)
 np.random.seed(0)
-
 
 # Get training, validation and test data
 m_train = 100000
@@ -32,8 +38,3 @@ net.automate_training(X_train, Y_train, X_val, Y_val,
                       print_cost_every = print_cost_every,
                       learning_rate = learning_rate,
                       lr_decay = learning_rate_decay)
-
-
-# Save the trained model
-file_path = 'deepfusion/First_model'
-net.save(file_path)
