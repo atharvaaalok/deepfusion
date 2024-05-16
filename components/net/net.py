@@ -1,10 +1,13 @@
 from typing import Optional
 import time
 from graphviz import Source
+from ...utils.backend import Backend
+np = Backend.get_array_module()
 
 from ..data.data import Data
 from ..modules.module import Module
 from ..optimizers import DEFAULT_OPTIMIZER_DETAILS
+from ...utils.colors import red, cyan, color_end
 
 
 class Net:
@@ -143,11 +146,6 @@ class Net:
         """
         total_time_taken = sum(module_times)
         max_name = max(len(name) for name in module_names)
-
-        # Set colors that will be used to highlight the print output
-        red = '\033[0;31m' # Red
-        cyan = '\033[0;36m' # Cyan
-        color_end = '\033[0m' # Reset terminal color
 
         print(f'\n{pass_name} Time\n' + '-' * 50)
         for module, t in zip(module_names, module_times):
@@ -344,3 +342,62 @@ class Net:
         # Create a Source object and display the graph
         source = Source(dot_string)
         source.view()
+    
+
+    def automate_training(
+        self,
+        X_train,
+        Y_train,
+        X_val,
+        Y_val,
+        B: int = 64,
+        epochs: int = 1000,
+        print_cost_every: int = 100,
+        learning_rate: float = 0.001,
+        lr_decay: float = 0.01,
+    ) -> None:
+        """Automates the learning procedure for neural networks with a single input and loss."""
+
+        # Set net object to self
+        net = self
+
+        # Set initial learning rate
+        net.set_learning_rate(learning_rate)
+
+        # Get input, target label and loss node
+        x = net.topological_order[0]
+        for node in reversed(self.topological_order):
+            if isinstance(node, Data):
+                if node.input is None:
+                    # Set target node
+                    y = node
+                    break
+        loss = net.topological_order[-1]
+
+        # Train the network
+        for epoch in range(1, epochs + 1):
+            # Generate mini batch of training examples
+            idx = np.random.choice(X_train.shape[0], size = B, replace = False)
+            x.val = X_train[idx, :]
+            y.val = Y_train[idx, :]
+
+            # Run the forward pass
+            net.forward()
+            
+            # Print cost every few steps
+            if epoch % print_cost_every == 0 or epoch == 1:
+                J = loss.val
+                num_digits = len(str(epochs))
+                print(f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  {cyan}Cost:{color_end} {J:11.6f}')
+            
+            # Run the backward pass
+            net.backward()
+
+            # Update the parameters using the gradients
+            net.update()
+
+            # Clear gradients after the parameters have been updated so that they don't accumulate
+            net.clear_grads()
+
+            # Implement decay in the learning rate
+            net.set_learning_rate(learning_rate = learning_rate / (1 + lr_decay * epoch))
