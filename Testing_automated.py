@@ -18,8 +18,8 @@ X_test, Y_test = generate_data(m_test)
 
 
 # Set network training properties
-epochs = 1000
-print_cost_every = 100
+epochs = 10000
+print_cost_every = 1000
 learning_rate = 0.01
 B = 64
 learning_rate_decay = 0.001

@@ -1,6 +1,7 @@
 from typing import Optional
 import time
 from graphviz import Source
+import matplotlib.pyplot as plt
 from ...utils.backend import Backend
 np = Backend.get_array_module()
 
@@ -361,9 +362,6 @@ class Net:
         # Set net object to self
         net = self
 
-        # Set initial learning rate
-        net.set_learning_rate(learning_rate)
-
         # Get input, target label and loss node
         x = net.topological_order[0]
         for node in reversed(self.topological_order):
@@ -374,22 +372,37 @@ class Net:
                     break
         loss = net.topological_order[-1]
 
+        # Set initial learning rate
+        net.set_learning_rate(learning_rate)
+
+        # Initialize lists for storing training and validation errors
+        epoch_list = []
+        cost_train = []
+        cost_val = []
+
+        # Initialize interactive plot
+        plt.ion()
+        fig, ax = plt.subplots()
+        ax.set_xlabel('Epochs')
+        ax.set_ylabel('Cost')
+        ax.set_yscale('log')  # Set y-axis to logarithmic scale
+        train_line, = ax.plot([], [], label = 'Train Cost', color = '#277cb3', linewidth = 2)
+        val_line, = ax.plot([], [], label = 'Val Cost', color = '#fa7f13', linewidth = 2)
+        ax.legend()
+
         # Train the network
         for epoch in range(1, epochs + 1):
+            # Turn on training mode
+            net.set_mode('train')
+
             # Generate mini batch of training examples
             idx = np.random.choice(X_train.shape[0], size = B, replace = False)
             x.val = X_train[idx, :]
             y.val = Y_train[idx, :]
 
             # Run the forward pass
-            net.forward()
-            
-            # Print cost every few steps
-            if epoch % print_cost_every == 0 or epoch == 1:
-                J = loss.val
-                num_digits = len(str(epochs))
-                print(f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  {cyan}Cost:{color_end} {J:11.6f}')
-            
+            net.forward()            
+
             # Run the backward pass
             net.backward()
 
@@ -401,3 +414,37 @@ class Net:
 
             # Implement decay in the learning rate
             net.set_learning_rate(learning_rate = learning_rate / (1 + lr_decay * epoch))
+
+
+            # Print cost every few steps
+            if epoch % print_cost_every == 0 or epoch == 1:
+                J_train = loss.val
+                num_digits = len(str(epochs))
+                epoch_list.append(epoch)
+                cost_train.append(J_train)
+
+                # Evaluate current model on mini-batch of validation data
+                net.set_mode('test')
+                x.val = X_val
+                y.val = Y_val
+                net.forward()
+                J_val = loss.val
+                cost_val.append(J_val)
+                
+                print(f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  ' \
+                      f'{cyan}Train Cost:{color_end} {J_train:11.6f}.  ' \
+                      f'{cyan}Val Cost:{color_end} {J_val:11.6f}')
+                
+                # Update the plot
+                plt.ion()
+                train_line.set_xdata(epoch_list)
+                train_line.set_ydata(cost_train)
+                val_line.set_xdata(epoch_list)
+                val_line.set_ydata(cost_val)
+                ax.relim()
+                ax.autoscale_view()
+                plt.draw()
+                plt.pause(0.001)
+
+        plt.ioff()
+        plt.show()
