@@ -1,6 +1,6 @@
 import numpy as np
 
-from .components.net import Net
+from ..components.net import Net
 from .data_def import generate_data
 
 

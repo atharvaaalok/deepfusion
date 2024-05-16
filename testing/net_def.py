@@ -1,8 +1,8 @@
-from .components.data import Data
-from .components.modules import MatMul
-from .components.modules.activation_functions import Tanh
-from .components.modules.loss_functions import MSE
-from .components.net import Net
+from ..components.data import Data
+from ..components.modules import MatMul
+from ..components.modules.activation_functions import Tanh
+from ..components.modules.loss_functions import MSE
+from ..components.net import Net
 
 
 # Construct neural network
