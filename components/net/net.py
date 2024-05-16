@@ -318,7 +318,7 @@ class Net:
                     node.set_mode(mode)
     
 
-    def visualize(self) -> None:
+    def visualize(self, filename = 'Source') -> None:
         """Draws a graph to visualize the network."""
 
         dag = self.graph
@@ -332,7 +332,7 @@ class Net:
             shape = 'ellipse' if isinstance(node, Data) else 'rect'
             dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}"];\n'
             for connected_node in connected_nodes:
-                shape = 'ellipse' if isinstance(node, Data) else 'rect'
+                shape = 'ellipse' if isinstance(connected_node, Data) else 'rect'
                 dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}"];\n'
         
         # Add edges
@@ -343,7 +343,8 @@ class Net:
         dot_string += '}'
 
         # Create a Source object and display the graph
-        source = Source(dot_string)
+        filename += '.gv'
+        source = Source(dot_string, filename = filename)
         source.view()
     
 
@@ -478,3 +479,11 @@ class Net:
             file_path += '.df'
         
         return file_path
+
+
+    def connect(self, root_nodes: list[Data]) -> None:
+        self.root_nodes = root_nodes
+
+        self.topological_sort()
+        self.create_graph_dicts()
+        self.create_lookup()
