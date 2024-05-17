@@ -3,7 +3,7 @@ import numpy as np
 from .components.data import Data
 from .components.modules import Conv2D
 from .components.modules.activation_functions import Relu
-from .components.modules.normalizations import BatchNorm
+from .components.modules.normalizations.layer_norm_conv import LayerNorm
 from .components.modules.loss_functions import SumLoss
 from .components.net import Net
 from .utils.grad_check import gradient_checker
@@ -34,7 +34,7 @@ conv = Conv2D(ID = f'Conv2D', inputs = inputs, output = z, filter_size = f,
                 filter_count = filter_count, padding = padding, stride = stride, weight_init_type = weight_init_type)
 
 z_norm = Data(ID = f'z_norm', shape = (filter_count, o, o))
-norm = BatchNorm(ID = f'Norm', inputs = [z], output = z_norm)
+norm = LayerNorm(ID = f'Norm', inputs = [z], output = z_norm)
 
 a = Data(ID = 'a', shape = (filter_count, o, o))
 act_f = Relu(ID = 'Tanh', inputs = [z_norm], output = a)
@@ -63,4 +63,4 @@ net.backward()
 print(x.deriv.shape)
 
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss, h = 1e-6)
+gradient_checker(net = net, data_obj = norm.gamma, loss_obj = loss, h = 1e-6)

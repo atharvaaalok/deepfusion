@@ -3,7 +3,7 @@ import numpy as np
 from .components.data import Data
 from .components.modules import MatMul
 from .components.modules.activation_functions import Relu
-from .components.modules.normalizations import BatchNorm
+from .components.modules.normalizations import LayerNorm
 from .components.modules.loss_functions import SumLoss
 from .components.net import Net
 from .utils.grad_check import gradient_checker
@@ -35,7 +35,7 @@ z = Data(ID = 'z', shape = (1, 10))
 matmul = MatMul(ID = 'Matmul', inputs = inputs, output = z)
 
 z_norm = Data(ID = 'z_norm', shape = (1, 10))
-norm = BatchNorm(ID = 'Norm', inputs = [z], output = z_norm)
+norm = LayerNorm(ID = 'Norm', inputs = [z], output = z_norm)
 
 a = Data(ID = 'a', shape = (1, 10))
 relu = Relu(ID = 'relu', inputs = [z_norm], output = a)
@@ -52,4 +52,4 @@ net = Net(ID = 'Net', root_nodes = [loss])
 x.val = X_train
 
 
-gradient_checker(net = net, data_obj = norm.gamma, loss_obj = loss)
+gradient_checker(net = net, data_obj = x, loss_obj = loss)
