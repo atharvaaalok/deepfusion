@@ -1,12 +1,12 @@
 import numpy as np
 
-from .components.data import Data
-from .components.modules import MatMul
-from .components.modules.activation_functions import Relu
-from .components.modules.normalizations.layer_norm_gen import LayerNorm
-from .components.modules.loss_functions import SumLoss
-from .components.net import Net
-from .utils.grad_check import gradient_checker
+from ..components.data import Data
+from ..components.modules import MatMul
+from ..components.modules.activation_functions import Relu
+from ..components.modules.normalizations import LayerNorm
+from ..components.modules.loss_functions import SumLoss
+from ..components.net import Net
+from ..utils.grad_check import gradient_checker
 
 
 def f(X):
