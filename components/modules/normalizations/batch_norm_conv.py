@@ -71,10 +71,10 @@ class BatchNorm(Module):
         # Go through checks first
         assert inputs[0].shape == output.shape, \
             'For BatchNorm input and output shape should be same.'
-
+        
         # Define the parameters gamma and beta associated with the module
-        gamma_shape = output.shape
-        beta_shape = output.shape
+        gamma_shape = (1, output.shape[0], 1, 1)
+        beta_shape = (1, output.shape[0], 1, 1)
         self.gamma = Data(ID = ID + '_gamma',
                           shape = gamma_shape,
                           val = np.ones(gamma_shape),
@@ -86,7 +86,7 @@ class BatchNorm(Module):
                          val = np.zeros(beta_shape),
                          is_frozen = is_frozen,
                          optimizer_details = optimizer_details)
-
+        
         parameter_list = [self.gamma, self.beta]
 
         super().__init__(ID, inputs, output, parameter_list = parameter_list,
@@ -105,7 +105,7 @@ class BatchNorm(Module):
         self.cache_test = {'mu_avg': 0, 'sigma_sq_avg': 0}
         # Maintain counter of update steps for calculating average of mean and var incrementally
         self.t = 0
-
+    
 
     @override
     def forward(self) -> None:
@@ -125,12 +125,12 @@ class BatchNorm(Module):
             self.t += 1
             self.cache_test['mu_avg'] += (mu - self.cache_test['mu_avg']) / self.t
             self.cache_test['sigma_sq_avg'] += (sigma_sq - self.cache_test['sigma_sq_avg']) / self.t
-        
+
         elif self.mode == 'test':
             # Use the cached average mean and variance from training
             mu = self.cache_test['mu_avg']
             sigma_sq = self.cache_test['sigma_sq_avg']
-
+        
         # Normalize X
         X_hat = (X - mu) / np.sqrt(sigma_sq + self.epsilon)
 
@@ -150,8 +150,8 @@ class BatchNorm(Module):
         X_hat = (X - mu) / np.sqrt(sigma_sq + self.epsilon)
 
         # Set derivatives for the parameters beta and gamma
-        self.beta.deriv = self.beta.deriv + np.sum(out_deriv, axis = 0, keepdims = True)
-        self.gamma.deriv = self.gamma.deriv + np.sum(out_deriv * X_hat, axis = 0, keepdims = True)
+        self.beta.deriv = self.beta.deriv + np.sum(out_deriv, axis = (0, 2, 3), keepdims = True)
+        self.gamma.deriv = self.gamma.deriv + np.sum(out_deriv * X_hat, axis = (0, 2, 3), keepdims = True)
 
         # Calculate derivative of loss w.r.t. X_hat
         dX_hat = self.gamma.val * out_deriv
@@ -162,8 +162,8 @@ class BatchNorm(Module):
         dX_3 = - X_hat * np.mean(X_hat * dX_hat, axis = 0, keepdims = True)
 
         self.inputs[0].deriv = self.inputs[0].deriv + (1 / np.sqrt(sigma_sq + self.epsilon)) * (dX_1 + dX_2 + dX_3)
-    
 
+    
     def set_mode(self, mode: str) -> None:
         """Sets the mode (training/testing) for the module.
         
