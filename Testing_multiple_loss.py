@@ -63,4 +63,4 @@ net.backward()
 
 # print(x.deriv)
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss1)
+gradient_checker(net = net, data_obj = x)

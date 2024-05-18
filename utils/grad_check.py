@@ -5,7 +5,7 @@ from ..components.net import Net
 from ..components.data import Data
 
 
-def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) -> None:
+def gradient_checker(net: Net, data_obj: Data, h: float = 1e-6) -> None:
     """Performs comparison between analytic and numeric gradient for a data object in a neural net.
     
     Args:
@@ -50,20 +50,22 @@ def gradient_checker(net: Net, data_obj: Data, loss_obj: Data, h: float = 1e-5) 
         idx = iter_x.multi_index
         old_x = x[idx]
 
-        # Evaluate network at x + h
-        x[idx] = old_x + h
-        np.random.seed(0)
-        net.forward_from_node(data_obj) if data_node else net.forward()
-        f_plus = loss_obj.val
+        # Add up gradient contributions due to all loss functions present in the network
+        for loss_obj in net.root_nodes:
+            # Evaluate network at x + h
+            x[idx] = old_x + h
+            np.random.seed(0)
+            net.forward_from_node(data_obj) if data_node else net.forward()
+            f_plus = loss_obj.val
 
-        # Evaluate network at x - h
-        x[idx] = old_x - h
-        np.random.seed(0)
-        net.forward_from_node(data_obj) if data_node else net.forward()
-        f_minus = loss_obj.val
+            # Evaluate network at x - h
+            x[idx] = old_x - h
+            np.random.seed(0)
+            net.forward_from_node(data_obj) if data_node else net.forward()
+            f_minus = loss_obj.val
 
-        # Compute numeric gradient at the current x index
-        numeric_grad[idx] = (f_plus - f_minus) / (2 * h)
+            # Compute numeric gradient at the current x index
+            numeric_grad[idx] += (f_plus - f_minus) / (2 * h)
 
         # Restore old value of x
         x[idx] = old_x
