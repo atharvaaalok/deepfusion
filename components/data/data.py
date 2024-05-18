@@ -94,6 +94,9 @@ class Data:
                 reg_step = 0.0
             self.val -= self.learning_rate * (optimizer_step + reg_step)
 
+        # Clear gradients after updating the daja object
+        self.clear_grads()
+
 
     def freeze(self) -> None:
         """Freeze the data object so that updates to its value will no longer be made."""
