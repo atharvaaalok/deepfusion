@@ -5,8 +5,7 @@ from .components.modules import MatMul
 from .components.modules.activation_functions import Relu
 from .components.modules.loss_functions import SumLoss
 from .components.net import Net
-from .utils.grad_check import gradient_checker
-
+from .utils.grad_check_mult import gradient_checker
 
 def f(X):
     Y = X[:, 0:1] + 2 * X[:, 1:2] ** 2 + 3 * X[:, 2:3] ** 0.5
@@ -63,4 +62,4 @@ net.backward()
 
 # print(x.deriv)
 
-gradient_checker(net = net, data_obj = x, loss_obj = loss1)
+gradient_checker(net = net, data_obj = x)
