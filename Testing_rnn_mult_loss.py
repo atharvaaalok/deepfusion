@@ -24,15 +24,17 @@ factor = 5
 X_train = np.random.rand(m_train, 3) * factor
 Y_train = f(X_train)
 
+B = m_train
+
 
 # Construct the neural network
-a0 = Data(ID = 'a0', shape = (1, 3))
-x1 = Data(ID = 'x1', shape = (1, 3))
+a0 = Data(ID = 'a0', shape = (B, 3))
+x1 = Data(ID = 'x1', shape = (B, 3))
 
-a1 = Data(ID = 'a1', shape = (1, 3))
+a1 = Data(ID = 'a1', shape = (B, 3))
 rnn1_1 = RNN1(ID = 'RNN1_1', inputs = [a0, x1], output = a1)
 
-y1 = Data(ID = 'y1', shape = (1, 1))
+y1 = Data(ID = 'y1', shape = (B, 1))
 rnn1_2 = RNN2(ID = 'RNN1_2', inputs = [a1], output = y1)
 
 # Attach loss layer
@@ -41,11 +43,11 @@ sumloss1 = SumLoss(ID = 'Sumloss1', inputs = [y1], output = loss1)
 
 
 # Add another RNN block
-x2 = Data(ID = 'x2', shape = (1, 3))
-a2 = Data(ID = 'a2', shape = (1, 3))
+x2 = Data(ID = 'x2', shape = (B, 3))
+a2 = Data(ID = 'a2', shape = (B, 3))
 rnn2_1 = RNN1(ID = 'RNN2_1', inputs = [a1, x2], output = a2)
 
-y2 = Data(ID = 'y2', shape = (1, 1))
+y2 = Data(ID = 'y2', shape = (B, 1))
 rnn1_2 = RNN2(ID = 'RNN2_2', inputs = [a2], output = y2)
 
 # Attach loss layer

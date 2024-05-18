@@ -73,17 +73,5 @@ x2.val = X_train.copy()
 net.share_parameters([rnn1_1, rnn2_1])
 net.share_parameters([rnn1_2, rnn2_2])
 
-print(id(rnn1_1.Waa.val))
-print(id(rnn2_1.Waa.val))
-print(id(rnn1_1.Waa.deriv))
-print(id(rnn2_1.Waa.deriv))
-
-
 
 gradient_checker(net = net, data_obj = rnn1_1.Waa, h = 1e-6)
-
-
-print(id(rnn1_1.Waa.val))
-print(id(rnn2_1.Waa.val))
-print(id(rnn1_1.Waa.deriv))
-print(id(rnn2_1.Waa.deriv))

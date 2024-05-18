@@ -25,17 +25,19 @@ X_train = np.random.rand(m_train, 3) * factor
 Y_train = f(X_train)
 
 
+B = m_train
+
 # Construct neural network
-x = Data(ID = 'x', shape = (1, 3))
+x = Data(ID = 'x', shape = (B, 3))
 inputs = [x]
 
-z1 = Data(ID = 'z', shape = (1, 10))
+z1 = Data(ID = 'z', shape = (B, 10))
 matmul = MatMul(ID = 'Matmul', inputs = inputs, output = z1)
 
-a = Data(ID = 'a', shape = (1, 10))
+a = Data(ID = 'a', shape = (B, 10))
 relu = Relu(ID = 'Relu', inputs = [z1], output = a)
 
-z2 = Data(ID = 'z2', shape = (1, 1))
+z2 = Data(ID = 'z2', shape = (B, 1))
 matmul2 = MatMul(ID = 'Matmul2', inputs = [a], output = z2)
 
 # Attach loss function and variable

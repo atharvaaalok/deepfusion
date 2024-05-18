@@ -25,14 +25,16 @@ X_train = np.random.rand(m_train, 3) * factor
 Y_train = f(X_train)
 
 
-# Construct the neural network
-a0 = Data(ID = 'a0', shape = (1, 3))
-x0 = Data(ID = 'x0', shape = (1, 3))
+B = m_train
 
-a1 = Data(ID = 'a1', shape = (1, 3))
+# Construct the neural network
+a0 = Data(ID = 'a0', shape = (B, 3))
+x0 = Data(ID = 'x0', shape = (B, 3))
+
+a1 = Data(ID = 'a1', shape = (B, 3))
 rnn1 = RNN1(ID = 'RNN1', inputs = [a0, x0], output = a1)
 
-y1 = Data(ID = 'y1', shape = (1, 1))
+y1 = Data(ID = 'y1', shape = (B, 1))
 rnn2 = RNN2(ID = 'RNN2', inputs = [a1], output = y1)
 
 # Attach loss layer
