@@ -526,3 +526,18 @@ class Net:
         self.topological_sort()
         self.create_graph_dicts()
         self.create_lookup()
+    
+
+    def share_parameters(self, modules: list[Module]):
+        
+        # First verify that all modules are of the same type
+        module1 = modules[0]
+        for module in modules[1:]:
+            if not isinstance(module, type(module1)):
+                raise TypeError(f'Module {module.ID} is not of same type as {module1.ID} (type: {type(module1).__name__}).')
+        
+        # Share parameters across the modules
+        for module in modules[1:]:
+            for param_mod1, param_mod in zip(module1.parameter_list, module.parameter_list):
+                param_mod.val = param_mod1.val
+                param_mod.deriv = param_mod1.deriv
