@@ -154,7 +154,7 @@ class Net:
 
         print(f'\n{pass_name} Time\n' + '-' * 50)
         for module, t in zip(module_names, module_times):
-            print(f'{red}{module:{max_name}}{color_end} ran in: {t:.4f} s' \
+            print(f'{red}{module:{max_name}}{color_end} ran in: {t:.6f} s' \
                   f' {cyan}[{(t / total_time_taken) * 100:05.2f}%]{color_end}.')
         
         print(f'{red}Total Time{color_end}: {total_time_taken:.4f} s.')
@@ -179,10 +179,10 @@ class Net:
             for node in self.topological_order:
                 if isinstance(node, Module):
                     module_names.append(node.ID)
-                    start_time = time.time()
+                    start_time = time.perf_counter()
                     # Run the module's forward method
                     node.forward()
-                    module_times.append(time.time() - start_time)
+                    module_times.append(time.perf_counter() - start_time)
             
             self._print_module_times(module_names, module_times, pass_name = 'Forward')
     
@@ -205,10 +205,10 @@ class Net:
             for node in reversed(self.topological_order):
                 if isinstance(node, Module):
                     module_names.append(node.ID)
-                    start_time = time.time()
+                    start_time = time.perf_counter()
                     # Run the module's backward method
                     node.backward()
-                    module_times.append(time.time() - start_time)
+                    module_times.append(time.perf_counter() - start_time)
             
             self._print_module_times(module_names, module_times, pass_name = 'Backward')
     

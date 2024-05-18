@@ -39,13 +39,19 @@ class Sigmoid(Module):
         assert inputs[0].shape == output.shape, 'For Sigmoid input and output shape should be same.'
 
         super().__init__(ID, inputs, output)
+
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'sigmoid_x': 0}
     
 
     @override
     def forward(self) -> None:
-        self.output.val = _sigmoid(self.inputs[0].val)
+        # Cache sigmoid_x to use during backward pass
+        self.cache['sigmoid_x'] = _sigmoid(self.inputs[0].val)
+
+        self.output.val = self.cache['sigmoid_x']
     
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv += self.output.deriv * _sigmoid_deriv(self.inputs[0].val)
+        self.inputs[0].deriv += self.output.deriv * _sigmoid_deriv(sigmoid_x = self.cache['sigmoid_x'])

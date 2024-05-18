@@ -39,13 +39,19 @@ class Tanh(Module):
         assert inputs[0].shape == output.shape, 'For Tanh input and output shape should be same.'
 
         super().__init__(ID, inputs, output)
+
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'tanh_x': 0}
     
 
     @override
     def forward(self) -> None:
-        self.output.val = _tanh(self.inputs[0].val)
+        # Cache tanh_x to use during backward pass
+        self.cache['tanh_x'] = _tanh(self.inputs[0].val)
+
+        self.output.val = self.cache['tanh_x']
     
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv += self.output.deriv * _tanh_deriv(self.inputs[0].val)
+        self.inputs[0].deriv += self.output.deriv * _tanh_deriv(tanh_x = self.cache['tanh_x'])

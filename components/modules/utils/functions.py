@@ -41,17 +41,28 @@ def _sigmoid(x: npt.NDArray) -> npt.NDArray:
     return sigmoid_x
 
 
-def _sigmoid_deriv(x: npt.NDArray) -> npt.NDArray:
+def _sigmoid_deriv(x: npt.NDArray = None, sigmoid_x: npt.NDArray = None) -> npt.NDArray:
     """Derivative of the sigmoid function.
     
     Args:
         x: Input tensor at which the derivative of the sigmoid function is to be calculated.
+        sigmoid_x: Cached value of sigmoid(x) if available. Speeds up compute by not having to 
+            recalculate.
     
     Returns:
         npt.NDArray: Tensor of the same shape as x, containing the sigmoid derivative values.
+    
+    Raises:
+        ValueError: If neither x nor sigmoid_x is provided for computing the derivative of sigmoid
+            at x.
     """
+    if x is None and sigmoid_x is None:
+        raise ValueError('Provide either x or sigmoid_x to get the derivative of sigmoid at x.')
 
-    sigmoid_x = _sigmoid(x)
+    # If cached value of tanh_x is not provided first calculate it, if provided don't recalculate
+    if sigmoid_x is None:
+        sigmoid_x = _sigmoid(x)
+    
     return sigmoid_x * (1 - sigmoid_x)
 
 
@@ -95,17 +106,27 @@ def _tanh(x: npt.NDArray) -> npt.NDArray:
     return tanh_x
 
 
-def _tanh_deriv(x: npt.NDArray) -> npt.NDArray:
+def _tanh_deriv(x: npt.NDArray = None, tanh_x: npt.NDArray = None) -> npt.NDArray:
     """Derivative of the tanh function.
     
     Args:
         x: Input tensor at which the derivative of the tanh function is to be calculated.
+        tanh_x: Cached value of tanh(x) if available. Speeds up compute by not having to
+            recalculate.
     
     Returns:
         npt.NDArray: Tensor of the same shape as x, containing the tanh derivative values.
+    
+    Raises:
+        ValueError: If neither x nor tanh_x is provided for computing the derivative of tanh at x.
     """
+    if x is None and tanh_x is None:
+        raise ValueError('Provide either x or tanh_x to get the derivative of tanh at x.')
 
-    tanh_x = _tanh(x)
+    # If cached value of tanh_x is not provided first calculate it, if provided don't recalculate
+    if tanh_x is None:
+        tanh_x = _tanh(x)
+    
     return 1 - tanh_x ** 2
 
 

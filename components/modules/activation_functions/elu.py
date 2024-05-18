@@ -65,18 +65,23 @@ class ELU(Module):
         super().__init__(ID, inputs, output, parameter_list = parameter_list,
                          learning_rate = learning_rate, is_frozen = is_frozen,
                          optimizer_details = optimizer_details)
+        
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'exp_x': 0}
     
 
     @override
     def forward(self) -> None:
         x = self.inputs[0].val
-        self.output.val = np.where(x >= 0.0, x, self.alpha.val * (np.exp(x) - 1.0))
+        # Cache values to be used during backward pass
+        self.cache['exp_x'] = np.exp(x)
+        self.output.val = np.where(x >= 0.0, x, self.alpha.val * (self.cache['exp_x'] - 1.0))
     
 
     @override
     def backward(self) -> None:
         x = self.inputs[0].val
-        exp_x = np.exp(x)
+        exp_x = self.cache['exp_x']
         out_deriv = self.output.deriv
 
         self.inputs[0].deriv += out_deriv * np.where(x >= 0.0, 1.0, self.alpha.val * exp_x)
