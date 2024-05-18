@@ -320,13 +320,17 @@ class Net:
                     node.set_mode(mode)
     
 
-    def visualize(self, filename = 'Source') -> None:
+    def visualize(self, filename = 'Source', orientation = 'LR') -> None:
         """Draws a graph to visualize the network."""
+
+        available_orientations = ['LR', 'RL', 'BT', 'TB']
+        if orientation not in available_orientations:
+            raise ValueError(f'Specified orientation not available. Choose from - {available_orientations}')
 
         dag = self.graph
 
         dot_string = 'digraph G {\n'
-        dot_string += '    rankdir=LR;\n'  # Set direction to left to right
+        dot_string += f'    rankdir={orientation};\n'  # Set direction to left to right
 
         # Add nodes with their IDs and shapes
         for node, connected_nodes in dag.items():

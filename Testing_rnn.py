@@ -3,7 +3,7 @@ import numpy as np
 from .components.data import Data
 from .components.modules.rnn import RNN1
 from .components.modules.rnn import RNN2
-from .components.modules.loss_functions import MSE
+from .components.modules.loss_functions import SumLoss
 from .components.net import Net
 from .utils.grad_check import gradient_checker
 
@@ -36,9 +36,8 @@ y1 = Data(ID = 'y1', shape = (1, 1))
 rnn2 = RNN2(ID = 'RNN2', inputs = [a1], output = y1)
 
 # Attach loss layer
-y = Data(ID = 'y', shape = (1, 1))
 loss = Data(ID = 'loss', shape = (1, 1))
-mse = MSE(ID = 'MSE', inputs = [y1, y], output = loss)
+mse = SumLoss(ID = 'Sumloss', inputs = [y1], output = loss)
 
 
 # Initialize neural network
@@ -46,13 +45,12 @@ net = Net(ID = 'Net', root_nodes = [loss])
 
 
 # # Visualize the network
-# net.visualize()
+net.visualize()
 
 
 # Set required values
 a0.val = a_train
 x0.val = X_train
-y.val = Y_train
 
 
-gradient_checker(net = net, data_obj = x0, loss_obj = loss, h = 1e-6)
+gradient_checker(net = net, data_obj = x0, h = 1e-6)
