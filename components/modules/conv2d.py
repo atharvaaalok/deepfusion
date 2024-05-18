@@ -187,14 +187,14 @@ class Conv2D(Module):
         conv_flat_deriv = conv_deriv_shaped.reshape(*self.cache['conv_flat_shape'])
 
         # Bias derivative
-        self.b.deriv = np.sum(conv_flat_deriv, axis = (0, 2)).reshape(-1, 1)
+        self.b.deriv += np.sum(conv_flat_deriv, axis = (0, 2)).reshape(-1, 1)
 
         # Filter derivatives
         # Find derivative of the loss w.r.t. the F_flat matrix used in forward pass
         F_flat_deriv = np.einsum('ebg,eag->ab', self.cache['X_flat'], conv_flat_deriv)
         # Get derivative for each filter
         for i in range(self.filter_count):
-            self.F_list[i].deriv = F_flat_deriv[i].reshape(self.cache['F_shape'])
+            self.F_list[i].deriv += F_flat_deriv[i].reshape(self.cache['F_shape'])
         
 
         # Input derivatives
@@ -206,7 +206,7 @@ class Conv2D(Module):
             deriv = col2im(X_flat_deriv[i], self.cache['X_shape'], self.filter_size, self.padding, self.stride)
             Xi_deriv_list.append(deriv)
         
-        self.inputs[0].deriv = np.stack(Xi_deriv_list, axis = 0)
+        self.inputs[0].deriv += np.stack(Xi_deriv_list, axis = 0)
     
 
     def set_regularization(self, regularizer_details: dict) -> None:

@@ -56,4 +56,4 @@ class Flatten(Module):
     @override
     def backward(self) -> None:
         # Backward pass is simply reshaping the output derivative
-        self.inputs[0].deriv = self.output.deriv.reshape(self.inputs[0].val.shape)
+        self.inputs[0].deriv += self.output.deriv.reshape(self.inputs[0].val.shape)

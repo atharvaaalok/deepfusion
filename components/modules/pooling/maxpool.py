@@ -129,4 +129,4 @@ class MaxPool(Module):
                         in_deriv[m, d, idx_i + i_max, idx_j + j_max] = out_deriv[m, d, i, j]
         
         
-        self.inputs[0].deriv = in_deriv
+        self.inputs[0].deriv += in_deriv

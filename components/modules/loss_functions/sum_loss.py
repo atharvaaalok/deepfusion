@@ -52,4 +52,4 @@ class SumLoss(Module):
     def backward(self) -> None:
         batch_size = self.inputs[0].val.shape[0]
 
-        self.inputs[0].deriv = self.inputs[0].deriv + (1 / batch_size) * np.ones(self.inputs[0].val.shape) * self.output.deriv
+        self.inputs[0].deriv += (1 / batch_size) * np.ones(self.inputs[0].val.shape) * self.output.deriv

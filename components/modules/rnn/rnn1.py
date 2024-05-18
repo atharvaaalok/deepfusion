@@ -73,12 +73,12 @@ class RNN1(Module):
     def backward(self) -> None:
         d_temp_a = _sigmoid_deriv(self.cache['temp_a']) * self.output.deriv
 
-        self.inputs[0].deriv = self.inputs[0].deriv + d_temp_a @ self.Waa.val.T
-        self.inputs[1].deriv = self.inputs[1].deriv + d_temp_a @ self.Wax.val.T
+        self.inputs[0].deriv += d_temp_a @ self.Waa.val.T
+        self.inputs[1].deriv += d_temp_a @ self.Wax.val.T
 
-        self.ba.deriv = self.ba.deriv + np.sum(d_temp_a, axis = 0, keepdims = True)
-        self.Waa.deriv = self.Waa.deriv + self.inputs[0].val.T @ d_temp_a
-        self.Wax.deriv = self.Wax.deriv + self.inputs[1].val.T @ d_temp_a
+        self.ba.deriv += np.sum(d_temp_a, axis = 0, keepdims = True)
+        self.Waa.deriv += self.inputs[0].val.T @ d_temp_a
+        self.Wax.deriv += self.inputs[1].val.T @ d_temp_a
 
 
 

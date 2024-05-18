@@ -70,7 +70,7 @@ class Dropout(Module):
 
     @override
     def backward(self) -> None:
-        self.inputs[0].deriv = self.inputs[0].deriv + self.output.deriv * self.cache['mask']
+        self.inputs[0].deriv += self.output.deriv * self.cache['mask']
     
 
     def set_mode(self, mode: str) -> None:

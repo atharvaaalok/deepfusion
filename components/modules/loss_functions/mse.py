@@ -53,5 +53,5 @@ class MSE(Module):
     def backward(self) -> None:
         batch_size = self.inputs[0].val.shape[0]
 
-        self.inputs[0].deriv = self.inputs[0].deriv + (1 / batch_size) * (self.inputs[0].val - self.inputs[1].val) * self.output.deriv
-        self.inputs[1].deriv = self.inputs[1].deriv + (1 / batch_size) * (self.inputs[1].val - self.inputs[0].val) * self.output.deriv
+        self.inputs[0].deriv += (1 / batch_size) * (self.inputs[0].val - self.inputs[1].val) * self.output.deriv
+        self.inputs[1].deriv += (1 / batch_size) * (self.inputs[1].val - self.inputs[0].val) * self.output.deriv

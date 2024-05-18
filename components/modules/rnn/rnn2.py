@@ -64,10 +64,10 @@ class RNN2(Module):
     def backward(self) -> None:
         d_temp_y = _sigmoid_deriv(self.cache['temp_y']) * self.output.deriv
 
-        self.by.deriv = self.by.deriv + np.sum(d_temp_y, axis = 0, keepdims = True)
-        self.Way.deriv = self.Way.deriv + self.inputs[0].val.T @ d_temp_y
+        self.by.deriv += np.sum(d_temp_y, axis = 0, keepdims = True)
+        self.Way.deriv += self.inputs[0].val.T @ d_temp_y
 
-        self.inputs[0].deriv = self.inputs[0].deriv + d_temp_y @ self.Way.val.T
+        self.inputs[0].deriv += d_temp_y @ self.Way.val.T
 
 
 
