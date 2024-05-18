@@ -114,8 +114,10 @@ class Net:
                         _topological_sort_util(child_node)
                 
                 topological_order.append(node)
-            
-        _topological_sort_util(*self.root_nodes)
+        
+        for root_node in self.root_nodes:
+            _topological_sort_util(root_node)
+        
         self.topological_order = topological_order
     
 
