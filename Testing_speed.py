@@ -2,8 +2,9 @@ import numpy as np
 
 from .components.data import Data
 from .components.net import Net
-from .components.modules.activation_functions import Tanh
-from .components.modules.loss_functions import SumLoss
+from .components.modules import MatMul
+from .components.modules.activation_functions import Relu
+from .components.modules.loss_functions import MSE
 from .utils.colors import red, cyan, color_end
 
 
@@ -27,18 +28,25 @@ Y_train = f(X_train)
 B = m_train
 
 # Construct neural network
-ActF = Tanh
-LossF = SumLoss
+ActF = Relu
+LossF = MSE
 
 x = Data(ID = 'x', shape = (B, dim))
 inputs = [x]
 
+z1 = Data(ID = 'x', shape = (B, dim))
+matmul1 = MatMul(ID = 'MatMul1', inputs = inputs, output = z1)
+
 a = Data(ID = 'a', shape = (B, dim))
-act_f = ActF(ID = 'ActF', inputs = inputs, output = a)
+act_f = ActF(ID = 'ActF', inputs = [z1], output = a)
+
+z2 = Data(ID = 'x', shape = (B, 1))
+matmul2 = MatMul(ID = 'MatMul2', inputs = [a], output = z2)
 
 # Attach loss variable and module
+y = Data(ID = 'y', shape = (B, 1))
 loss = Data(ID = 'loss', shape = (1, 1))
-loss_f = LossF(ID = 'LossF', inputs = [a], output = loss)
+loss_f = LossF(ID = 'LossF', inputs = [z2, y], output = loss)
 
 
 # Initialize neural network
@@ -60,7 +68,7 @@ for epoch in range(1, epochs + 1):
     # Generate mini batch of training examples
     idx = np.random.choice(X_train.shape[0], size = B, replace = False)
     x.val = X_train[idx, :]
-    # y.val = Y_train[idx, :]
+    y.val = Y_train[idx, :]
 
     # Run the forward pass
     net.forward(verbose = True)            

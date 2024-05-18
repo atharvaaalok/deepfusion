@@ -34,17 +34,24 @@ class MSE(Module):
     def __init__(self, ID: str, inputs: list[Data], output: Data) -> None:
 
         # Go through checks first
-        assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
-            'For MSE both input shapes should be (1, 1).'
+        assert inputs[0].shape[1] == 1 and inputs[1].shape[1] == 1, \
+            'For MSE both input shapes should be (B, 1).'
         assert output.shape == (1, 1), 'For MSE output shape should be (1, 1)).'
 
         super().__init__(ID, inputs, output)
+
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'h_minus_y': 0}
     
     
     @override
     def forward(self) -> None:
         batch_size = self.inputs[0].val.shape[0]
-        self.output.val = (1 / batch_size) * (1 / 2) * np.sum((self.inputs[0].val - self.inputs[1].val) ** 2)
+
+        # Cache values that will be used during backward pass
+        self.cache['h_minus_y'] = self.inputs[0].val - self.inputs[1].val
+
+        self.output.val = (1 / batch_size) * (1 / 2) * np.sum((self.cache['h_minus_y']) ** 2)
 
         self.output.deriv = 1.0
 
@@ -53,5 +60,8 @@ class MSE(Module):
     def backward(self) -> None:
         batch_size = self.inputs[0].val.shape[0]
 
-        self.inputs[0].deriv += (1 / batch_size) * (self.inputs[0].val - self.inputs[1].val) * self.output.deriv
-        self.inputs[1].deriv += (1 / batch_size) * (self.inputs[1].val - self.inputs[0].val) * self.output.deriv
+        # Calculate and store value that will be used for derivative of both inputs to speed compute
+        deriv = (1 / batch_size) * (self.cache['h_minus_y']) * self.output.deriv
+
+        self.inputs[0].deriv += deriv
+        self.inputs[1].deriv += (-deriv)

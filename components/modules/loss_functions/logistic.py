@@ -35,11 +35,14 @@ class Logistic(Module):
     def __init__(self, ID: str, inputs: list[Data], output: Data) -> None:
 
         # Go through checks first
-        assert inputs[0].shape == (1, 1) and inputs[1].shape == (1, 1), \
-            'For Logistic both input shapes should be (1, 1).'
+        assert inputs[0].shape[1] == 1 and inputs[1].shape[1] == 1, \
+            'For MSE both input shapes should be (B, 1).'
         assert output.shape == (1, 1), 'For Logistic output shape should be (1, 1).'
 
         super().__init__(ID, inputs, output)
+
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'sigmoid_t': 0}
     
 
     @override
@@ -48,7 +51,16 @@ class Logistic(Module):
 
         t = self.inputs[0].val
         y = self.inputs[1].val
-        self.output.val = (1 / batch_size) * np.sum(-y * np.log(_sigmoid(t)) - (1 - y) * np.log(_sigmoid(-t)))
+
+        # Cache values that will be used during backward pass
+        sig_t = _sigmoid(t)
+        self.cache['sigmoid_t'] = sig_t
+
+        # self.output.val = (1 / batch_size) * np.sum(-y * np.log(_sigmoid(t)) - (1 - y) * np.log(_sigmoid(-t)))
+
+        # The following is a computationally efficient way of calculating the above expression
+        # Note that sigmoid(-t) = 1 - sigmoid(t)
+        self.output.val = (1 / batch_size) * np.sum(-y * np.log(sig_t) - (1 - y) * np.log(1 - sig_t))
 
         self.output.deriv = 1.0
 
@@ -59,5 +71,11 @@ class Logistic(Module):
 
         t = self.inputs[0].val
         y = self.inputs[1].val
-        self.inputs[0].deriv += (1 / batch_size) * (-y * _sigmoid(-t) + (1 - y) * _sigmoid(t)) * self.output.deriv
+
+        sig_t = self.cache['sigmoid_t']
+
+        # self.inputs[0].deriv += (1 / batch_size) * (-y * _sigmoid(-t) + (1 - y) * _sigmoid(t)) * self.output.deriv
+
+        # The following is a computationally efficient way of calculating the above expression
+        self.inputs[0].deriv += (1 / batch_size) * (-y * (1 - sig_t) + (1 - y) * sig_t) * self.output.deriv
         self.inputs[1].deriv = 0

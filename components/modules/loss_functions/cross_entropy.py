@@ -40,6 +40,9 @@ class CrossEntropy(Module):
         assert output.shape == (1, 1), 'For Cross Entropy output shape should be (1, 1).'
 
         super().__init__(ID, inputs, output)
+
+        # Cache values during forward pass that will be useful in backward pass
+        self.cache = {'softmax_t': 0}
     
 
     @override
@@ -49,7 +52,10 @@ class CrossEntropy(Module):
         t = self.inputs[0].val
         y = self.inputs[1].val
 
-        cross_entropy = -np.log(np.sum(_softmax(t) * y, axis = 1, keepdims = True))
+        # Cache values that will be used during backward pass
+        self.cache['softmax_t'] = _softmax(t)
+
+        cross_entropy = -np.log(np.sum(self.cache['softmax_t'] * y, axis = 1, keepdims = True))
         self.output.val = (1 / batch_size) * np.sum(cross_entropy)
 
         self.output.deriv = 1.0
@@ -62,5 +68,5 @@ class CrossEntropy(Module):
         t = self.inputs[0].val
         y = self.inputs[1].val
 
-        self.inputs[0].deriv += (1 / batch_size) * (_softmax(t) - y) * self.output.deriv
+        self.inputs[0].deriv += (1 / batch_size) * (self.cache['softmax_t'] - y) * self.output.deriv
         self.inputs[1].deriv = 0
