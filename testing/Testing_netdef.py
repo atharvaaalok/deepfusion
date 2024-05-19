@@ -1,11 +1,11 @@
 import numpy as np
 
-from .components.data import Data
-from .components.net import Net
-from .components.modules import MatMul
-from .components.modules.activation_functions import Relu
-from .components.modules.loss_functions import MSE
-from .utils.colors import red, cyan, color_end
+from ..components.data import Data
+from ..components.net import Net
+from ..components.modules import MatMul
+from ..components.modules.activation_functions import Relu
+from ..components.modules.loss_functions import MSE
+from ..utils.colors import red, cyan, color_end
 
 
 def f(X):
