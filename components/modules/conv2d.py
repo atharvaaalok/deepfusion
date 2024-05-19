@@ -77,8 +77,8 @@ class Conv2D(Module):
         self.regularizer_details = regularizer_details if is_regularized else None
 
         # Get input and output dimensions
-        D_in, H_in, W_in = inputs[0].shape
-        D_out, H_out, W_out = output.shape
+        D_in, H_in, W_in = inputs[0].shape[-3:]
+        D_out, H_out, W_out = output.shape[-3:]
 
         # Go through checks first
         assert D_out == filter_count, 'Conv2D output depth should be same as filter count.'
