@@ -58,7 +58,7 @@ class CrossEntropy(Module):
         cross_entropy = -np.log(np.sum(self.cache['softmax_t'] * y, axis = 1, keepdims = True))
         self.output.val = (1 / batch_size) * np.sum(cross_entropy)
 
-        self.output.deriv = 1.0
+        self.output.deriv = np.array([1.0])
 
 
     @override

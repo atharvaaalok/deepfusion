@@ -62,7 +62,7 @@ class Logistic(Module):
         # Note that sigmoid(-t) = 1 - sigmoid(t)
         self.output.val = (1 / batch_size) * np.sum(-y * np.log(sig_t) - (1 - y) * np.log(1 - sig_t))
 
-        self.output.deriv = 1.0
+        self.output.deriv = np.array([1.0])
 
 
     @override

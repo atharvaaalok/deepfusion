@@ -161,6 +161,17 @@ class Net:
         print()
     
 
+    def set_initial_deriv(self):
+        # Set derivative to a zero array of the batch size shape for backward pass to work with +=
+        batch_size = self.topological_order[0].val.shape[0]
+        for node in self.topological_order:
+            # Set derivative for data nodes, parameters inside modules already have right dimensions
+            if isinstance(node, Data):
+                # Set derivative only if the batch_size is not accounted for
+                if node.deriv.shape[0] != batch_size:
+                    node.deriv = np.zeros((batch_size,) + node.shape[1:])
+    
+
     def forward(self, verbose = False) -> None:
         """Runs the forward method of each module in topological order to perform the neural net
         forward pass.
@@ -168,6 +179,13 @@ class Net:
         Args:
             verbose: Flag that decides whether to print the time taken by each module to run.
         """
+
+        # During the first forward pass with a particular batch size the deriv attribute of the data
+        # objects have the wrong shape and the in-place += during backward pass fails. So everytime
+        # a new batch size is specified for forward pass, set the deriv to zero arrays of
+        # appropriate size.
+        self.set_initial_deriv()
+
         if not verbose:
             for node in self.topological_order:
                 if isinstance(node, Module):

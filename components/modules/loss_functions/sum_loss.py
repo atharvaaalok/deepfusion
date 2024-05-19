@@ -45,7 +45,7 @@ class SumLoss(Module):
 
         self.output.val = (1 / batch_size) * np.sum(self.inputs[0].val)
 
-        self.output.deriv = 1.0
+        self.output.deriv = np.array([1.0])
     
 
     @override

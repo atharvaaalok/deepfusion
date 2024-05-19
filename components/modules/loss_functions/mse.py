@@ -53,7 +53,7 @@ class MSE(Module):
 
         self.output.val = (1 / batch_size) * (1 / 2) * np.sum((self.cache['h_minus_y']) ** 2)
 
-        self.output.deriv = 1.0
+        self.output.deriv = np.array([1.0])
 
 
     @override
