@@ -2,6 +2,7 @@ from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
 from deepfusion.components.data import Data
 from deepfusion.components.net import Net
+from deepfusion.utils.colors import green, red, color_end
 
 
 def gradient_checker(net: Net, data_obj: Data, h: float = 1e-6) -> None:
@@ -80,8 +81,9 @@ def gradient_checker(net: Net, data_obj: Data, h: float = 1e-6) -> None:
     rel_error[~idx] = (np.abs(analytic_grad[~idx] - numeric_grad[~idx]) /
                           np.maximum(epsilon, np.abs(analytic_grad[~idx]) + np.abs(numeric_grad[~idx])))
     
+    print(f'{green}Gradient checking w.r.t. {data_obj.ID}\n' + 40 * '-', f'{color_end}')
     # Print gradients and errors
-    print('\nAnalytic gradient\n', analytic_grad)
-    print('\nNumeric gradient\n', numeric_grad)
-    print('\nRelative error\n', rel_error)
-    print('\nMax error\n', np.max(rel_error))
+    print(f'{red}Analytic gradient{color_end}\n', analytic_grad)
+    print(f'\n{red}Numeric gradient{color_end}\n', numeric_grad)
+    print(f'\n{red}Relative error{color_end}\n', rel_error)
+    print(f'\n{red}Max error{color_end}\n', np.max(rel_error), '\n')
