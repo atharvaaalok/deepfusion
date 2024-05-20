@@ -353,16 +353,22 @@ class Net:
         dag = self.graph
 
         dot_string = 'digraph G {\n'
-        dot_string += f'    rankdir={orientation};\n'  # Set direction to left to right
+        dot_string += f'    rankdir={orientation};\n'  # Set direction
 
-        # Add nodes with their IDs and shapes
+        # Node colors
+        light_blue = '#ADD8E6'
+        light_coral = '#F08080'
+
+        # Add nodes with their IDs and shapes and colors
         for node, connected_nodes in dag.items():
             # Use ellipse to represent Data nodes and rectangles for Modules
             shape = 'ellipse' if isinstance(node, Data) else 'rect'
-            dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}"];\n'
+            color = light_blue if node.is_frozen else light_coral
+            dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
             for connected_node in connected_nodes:
                 shape = 'ellipse' if isinstance(connected_node, Data) else 'rect'
-                dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}"];\n'
+                color = 'light_blue' if connected_node.is_frozen else light_coral
+                dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
         
         # Add edges
         for node, connected_nodes in dag.items():
