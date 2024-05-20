@@ -25,3 +25,8 @@ class Optimizer(ABC):
             np.ndarray: Returns a tensor to be used by the Data object for performing an update.
         """
         pass
+
+
+    def __str__(self) -> str:
+        print_optimizer = type(self).__name__
+        return print_optimizer
