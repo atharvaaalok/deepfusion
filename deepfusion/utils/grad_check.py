@@ -1,4 +1,4 @@
-from .backend import Backend
+from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
 
 from ..components.net import Net

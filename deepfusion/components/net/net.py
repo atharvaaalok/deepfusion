@@ -4,7 +4,7 @@ import time
 from graphviz import Source
 import matplotlib.pyplot as plt
 import pickle
-from ...utils.backend import Backend
+from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
 
 from ..data.data import Data

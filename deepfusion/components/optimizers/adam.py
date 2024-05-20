@@ -2,7 +2,7 @@ from .optimizer import Optimizer
 from typing import override
 import numpy.typing as npt
 
-from ...utils.backend import Backend
+from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
 
 
