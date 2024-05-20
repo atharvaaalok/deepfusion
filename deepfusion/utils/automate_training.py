@@ -6,7 +6,7 @@ np = Backend.get_array_module()
 from deepfusion.components.data import Data
 from deepfusion.components.modules import Module
 from deepfusion.components.net import Net
-from deepfusion.utils.colors import red, cyan, color_end
+from deepfusion.utils.printing import print_net_performance
 
 
 def automate_training(
@@ -82,7 +82,6 @@ def automate_training(
         # Print cost every few steps
         if epoch % print_cost_every == 0 or epoch == 1:
             J_train = loss.val
-            num_digits = len(str(epochs))
             epoch_list.append(epoch)
             cost_train.append(J_train)
 
@@ -96,14 +95,8 @@ def automate_training(
                 cost_val.append(J_val)
             
             # Print the current performance
-            print_performance = (
-                f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  ' +
-                f'{cyan}Train Cost:{color_end} {J_train:11.6f}.  '
-            )
-            if consider_validation:
-                print_performance += f'{cyan}Val Cost:{color_end} {J_val:11.6f}'
-            
-            print(print_performance)
+            J_val = J_val if consider_validation else None
+            print_net_performance(epochs = epochs, epoch = epoch, J_train = J_train, J_val = J_val)
             
             # Update the plot
             plt.ion()
