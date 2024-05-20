@@ -20,6 +20,12 @@ class Regularizer:
         self.reg_strength = regularizer_details['reg_strength']
         self.reg_name = regularizer_details['reg_name']
         self.reg_fn, self.reg_fn_deriv = _get_regularizer_with_deriv(self.reg_name)
+    
+
+    def __str__(self) -> str:
+        print_regularizer = f'Name: {self.reg_name}, Strength: {self.reg_strength:0.2e}'
+        return print_regularizer
+
 
 
 def _get_regularizer_with_deriv(regularizer_name: str) -> tuple[Callable, Callable]:
