@@ -83,7 +83,7 @@ def automate_training(
         if epoch % print_cost_every == 0 or epoch == 1:
             J_train = loss.val
             epoch_list.append(epoch)
-            cost_train.append(J_train)
+            cost_train.append(to_numpy_array(J_train))
 
             if consider_validation:
                 # Evaluate current model on the entire validation data
@@ -92,7 +92,7 @@ def automate_training(
                 y.val = Y_val
                 net.forward()
                 J_val = loss.val
-                cost_val.append(J_val)
+                cost_val.append(to_numpy_array(J_val))
             
             # Print the current performance
             J_val = J_val if consider_validation else None
@@ -113,3 +113,8 @@ def automate_training(
 
     plt.ioff()
     plt.show()
+
+
+def to_numpy_array(array: npt.NDArray) -> npt.NDArray:
+    """Convert array to numpy array if it's a cupy array."""
+    return array.get() if np.__name__ == 'cupy' else array
