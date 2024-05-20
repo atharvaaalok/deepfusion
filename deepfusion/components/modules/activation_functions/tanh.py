@@ -38,7 +38,7 @@ class Tanh(Module):
         # Go through checks first
         assert inputs[0].shape == output.shape, 'For Tanh input and output shape should be same.'
 
-        super().__init__(ID, inputs, output)
+        super().__init__(ID, inputs, output, is_frozen = True)
 
         # Cache values during forward pass that will be useful in backward pass
         self.cache = {'tanh_x': 0}

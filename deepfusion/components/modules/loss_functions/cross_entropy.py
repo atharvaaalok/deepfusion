@@ -39,7 +39,7 @@ class CrossEntropyLoss(Module):
             'For Cross Entropy both input shapes should be same.'
         assert output.shape == (1, 1), 'For Cross Entropy output shape should be (1, 1).'
 
-        super().__init__(ID, inputs, output)
+        super().__init__(ID, inputs, output, is_frozen = True)
 
         # Cache values during forward pass that will be useful in backward pass
         self.cache = {'softmax_t': 0}
