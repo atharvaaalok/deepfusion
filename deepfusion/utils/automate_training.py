@@ -13,8 +13,8 @@ def automate_training(
     net: Net,
     X_train: npt.NDArray,
     Y_train: npt.NDArray,
-    X_val: npt.NDArray,
-    Y_val: npt.NDArray,
+    X_val: npt.NDArray = None,
+    Y_val: npt.NDArray = None,
     B: int = 64,
     epochs: int = 1000,
     print_cost_every: int = 100,
@@ -23,7 +23,10 @@ def automate_training(
 ) -> None:
     """Automates the learning procedure for neural networks with a single input and loss."""
 
-    # Get input, target label and loss node
+    # Determine whether to consider validation values or not
+    consider_validation = True if X_val is not None else False
+
+    # Get input, target output and loss node
     x = net.topological_order[0]
     for node in reversed(net.topological_order):
         if isinstance(node, Data):
@@ -39,7 +42,8 @@ def automate_training(
     # Initialize lists for storing training and validation errors
     epoch_list = []
     cost_train = []
-    cost_val = []
+    if consider_validation:
+        cost_val = []
 
     # Initialize interactive plot
     plt.ion()
@@ -48,7 +52,8 @@ def automate_training(
     ax.set_ylabel('Cost')
     ax.set_yscale('log')  # Set y-axis to logarithmic scale
     train_line, = ax.plot([], [], label = 'Train Cost', color = '#277cb3', linewidth = 2)
-    val_line, = ax.plot([], [], label = 'Val Cost', color = '#fa7f13', linewidth = 2)
+    if consider_validation:
+        val_line, = ax.plot([], [], label = 'Val Cost', color = '#fa7f13', linewidth = 2)
     ax.legend()
 
     # Train the network
@@ -70,9 +75,6 @@ def automate_training(
         # Update the parameters using the gradients
         net.update()
 
-        # Clear gradients after the parameters have been updated so that they don't accumulate
-        net.clear_grads()
-
         # Implement decay in the learning rate
         net.set_learning_rate(learning_rate = learning_rate / (1 + lr_decay * epoch))
 
@@ -84,28 +86,37 @@ def automate_training(
             epoch_list.append(epoch)
             cost_train.append(J_train)
 
-            # Evaluate current model on mini-batch of validation data
-            net.set_mode('test')
-            x.val = X_val
-            y.val = Y_val
-            net.forward()
-            J_val = loss.val
-            cost_val.append(J_val)
+            if consider_validation:
+                # Evaluate current model on the entire validation data
+                net.set_mode('test')
+                x.val = X_val
+                y.val = Y_val
+                net.forward()
+                J_val = loss.val
+                cost_val.append(J_val)
             
-            print(f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  ' \
-                    f'{cyan}Train Cost:{color_end} {J_train:11.6f}.  ' \
-                    f'{cyan}Val Cost:{color_end} {J_val:11.6f}')
+            # Print the current performance
+            print_performance = (
+                f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  '
+                f'{cyan}Train Cost:{color_end} {J_train:11.6f}.  '
+            )
+            if consider_validation:
+                print_performance += f'{cyan}Val Cost:{color_end} {J_val:11.6f}'
+            
+            print(print_performance)
             
             # Update the plot
             plt.ion()
             train_line.set_xdata(epoch_list)
             train_line.set_ydata(cost_train)
-            val_line.set_xdata(epoch_list)
-            val_line.set_ydata(cost_val)
+            if consider_validation:
+                val_line.set_xdata(epoch_list)
+                val_line.set_ydata(cost_val)
             ax.relim()
             ax.autoscale_view()
             plt.draw()
             plt.pause(0.001)
+
 
     plt.ioff()
     plt.show()
