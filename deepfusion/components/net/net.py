@@ -342,7 +342,7 @@ class Net:
                     node.set_mode(mode)
     
 
-    def visualize(self, filename = 'Source', orientation = 'LR') -> None:
+    def visualize(self, filename = 'Visualization', orientation = 'LR') -> None:
         """Draws a graph to visualize the network."""
 
         available_orientations = ['LR', 'RL', 'BT', 'TB']
