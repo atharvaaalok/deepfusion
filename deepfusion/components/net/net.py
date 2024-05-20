@@ -140,6 +140,11 @@ class Net:
             self.node_lookup[node.ID] = node
     
 
+    def get_node(self, ID: str) -> None:
+        """Return handle to the node corresponding to a particular ID."""
+        return self.node_lookup.get(ID, 'Node with specified ID is not available.')
+    
+
     @staticmethod
     def _print_module_times(module_names: list[str], module_times: list[float], pass_name: str):
         """Prints the time taken (absolute, percentage) by each module in forward/backward pass.
