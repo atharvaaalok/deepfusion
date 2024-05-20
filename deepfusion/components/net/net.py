@@ -10,7 +10,7 @@ np = Backend.get_array_module()
 from ..data.data import Data
 from ..modules.module import Module
 from ..optimizers import DEFAULT_OPTIMIZER_DETAILS
-from ...utils.colors import red, cyan, color_end
+from deepfusion.utils.colors import red, cyan, color_end
 
 
 class Net:
