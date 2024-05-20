@@ -97,7 +97,7 @@ def automate_training(
             
             # Print the current performance
             print_performance = (
-                f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  '
+                f'{red}Epoch:{color_end} [{epoch:{num_digits}}/{epochs}].  ' +
                 f'{cyan}Train Cost:{color_end} {J_train:11.6f}.  '
             )
             if consider_validation:
