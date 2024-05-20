@@ -41,7 +41,7 @@ class Flatten(Module):
         assert total_input_elements == total_output_elements, \
             'For Flatten module the total elements in input should equal the total output elements.'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
     
 
     @override

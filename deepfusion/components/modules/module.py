@@ -68,7 +68,7 @@ class Module(ABC):
         self.learning_rate = learning_rate
         self.set_learning_rate(learning_rate)
 
-        self.is_frozen = is_frozen
+        self.is_frozen = is_frozen if parameter_list is not None else True
         self.optimizer_details = optimizer_details if not is_frozen else None
 
         # Store the current module object in the outputs and input of the associated Data objects

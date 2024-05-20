@@ -40,7 +40,7 @@ class LRelu(Module):
         # Go through checks first
         assert inputs[0].shape == output.shape, 'For LRelu input and output shape should be same.'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
 
         self.alpha = alpha
     

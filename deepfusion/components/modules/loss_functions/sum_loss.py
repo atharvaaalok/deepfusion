@@ -36,7 +36,7 @@ class SumLoss(Module):
         # Go through the checks first
         assert output.shape == (1, 1), 'For Sum loss module output shape should be (1, 1).'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
     
 
     @override

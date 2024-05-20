@@ -45,7 +45,7 @@ class InvertedDropout(Module):
         assert inputs[0].shape == output.shape, \
             'For Inverted Dropout input and output shape should be same.'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
         
         # Works differently in train and test mode. Maintain state to use appropriate values
         self.mode = 'train'

@@ -62,7 +62,7 @@ class MaxPool(Module):
         assert ((H_in + 2 * padding - filter_size) / stride) + 1 == H_out, \
             'MaxPool output size should be consistent with ((n_in + 2p - f) / s) + 1 = n_out.'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
 
         # Store filter properties
         self.filter_size = filter_size

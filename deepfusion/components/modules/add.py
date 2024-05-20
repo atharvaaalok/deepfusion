@@ -38,7 +38,7 @@ class Add(Module):
         assert inputs[0].shape == inputs[1].shape, 'For Add both inputs should be of same shape.'
         assert inputs[0].shape == output.shape, 'For Add input and output shape should be same.'
 
-        super().__init__(ID, inputs, output, is_frozen = True)
+        super().__init__(ID, inputs, output)
     
 
     @override
