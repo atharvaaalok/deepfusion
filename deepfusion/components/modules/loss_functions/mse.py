@@ -7,7 +7,7 @@ from ..module import Module
 from ...data.data import Data
 
 
-class MSE(Module):
+class MSELoss(Module):
     """Mean Squared Error (MSE) module that computes the loss given predictions and target outputs.
 
     Attributes:

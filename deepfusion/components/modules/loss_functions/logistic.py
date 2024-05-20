@@ -8,7 +8,7 @@ from ...data.data import Data
 from ..utils.functions import _sigmoid
 
 
-class Logistic(Module):
+class LogisticLoss(Module):
     """Logistic loss module that computes the loss given predictions and target outputs.
 
     Attributes:

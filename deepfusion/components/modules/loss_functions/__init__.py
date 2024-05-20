@@ -1,4 +1,4 @@
-from .mse import MSE
-from .logistic import Logistic
-from .cross_entropy import CrossEntropy
+from .mse import MSELoss
+from .logistic import LogisticLoss
+from .cross_entropy import CrossEntropyLoss
 from .sum_loss import SumLoss

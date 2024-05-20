@@ -8,7 +8,7 @@ from ...data.data import Data
 from ..utils.functions import _softmax
 
 
-class CrossEntropy(Module):
+class CrossEntropyLoss(Module):
     """Cross Entropy loss module that computes the loss given predictions and target outputs.
 
     Attributes:
