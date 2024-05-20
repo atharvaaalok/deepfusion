@@ -142,3 +142,22 @@ class Data:
         """
         if not self.is_frozen:
             self.optimizer = get_optimizer(self.shape, optimizer_details)
+    
+
+    def __str__(self):
+        print_input = self.input.ID if self.input is not None else None
+        print_output = [ele.ID for ele in self.outputs] if len(self.outputs) > 0 else []
+        print_data = (f'Data Object\n' + 40 * '-' + '\n' +
+                      f'ID             : {self.ID}\n' +
+                      f'shape          : {self.shape}\n' +
+                      f'is_frozen      : {self.is_frozen}\n' +
+                      f'optimizer      : {self.optimizer}\n' +
+                      f'learning_rate  : {self.learning_rate}\n' +
+                      f'is_regularized : {self.is_regularized}\n' +
+                      f'regularizer    : {self.regularizer}\n' +
+                      f'input          : {print_input}\n' +
+                      f'outputs        : {print_output}\n' +
+                      f'val            : //\n' +
+                      f'deriv          : //\n')
+        
+        return print_data
