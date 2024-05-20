@@ -1,8 +1,9 @@
-from deepfusion.utils.backend import Backend
-np = Backend.get_array_module()
+from typing import Callable
 
 import numpy.typing as npt
-from typing import Callable
+
+from deepfusion.utils.backend import Backend
+np = Backend.get_array_module()
 
 
 class Regularizer:

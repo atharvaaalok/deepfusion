@@ -1,7 +1,7 @@
+import numpy.typing as npt
+
 from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
-
-import numpy.typing as npt
 
 
 # Sigmoid function and derivative

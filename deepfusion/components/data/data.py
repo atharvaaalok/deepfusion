@@ -1,9 +1,9 @@
-from deepfusion.utils.backend import Backend
-np = Backend.get_array_module()
-
-import numpy.typing as npt
 from typing import Optional
 
+import numpy.typing as npt
+
+from deepfusion.utils.backend import Backend
+np = Backend.get_array_module()
 from .regularizers import Regularizer
 from ..optimizers import get_optimizer, DEFAULT_OPTIMIZER_DETAILS
 

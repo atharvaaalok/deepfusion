@@ -1,8 +1,7 @@
-from deepfusion.utils.backend import Backend
-np = Backend.get_array_module()
-
 from typing import Optional, override
 
+from deepfusion.utils.backend import Backend
+np = Backend.get_array_module()
 from .module import Module
 from ..data.data import Data
 from ..optimizers import DEFAULT_OPTIMIZER_DETAILS

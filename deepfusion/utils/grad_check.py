@@ -1,8 +1,7 @@
 from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
-
-from ..components.net import Net
-from ..components.data import Data
+from deepfusion.components.data import Data
+from deepfusion.components.net import Net
 
 
 def gradient_checker(net: Net, data_obj: Data, h: float = 1e-6) -> None:

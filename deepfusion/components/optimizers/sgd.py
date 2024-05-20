@@ -1,7 +1,8 @@
-from .optimizer import Optimizer
 from typing import override
+
 import numpy.typing as npt
 
+from .optimizer import Optimizer
 
 class SGD(Optimizer):
     """Stochastic Gradient Descent (SGD) optimizer that performs update with plain loss derivative.

@@ -1,10 +1,11 @@
 from typing import Optional
 import time
-from graphviz import Source
 import pickle
+
+from graphviz import Source
+
 from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
-
 from ..data.data import Data
 from ..modules.module import Module
 from ..optimizers import DEFAULT_OPTIMIZER_DETAILS

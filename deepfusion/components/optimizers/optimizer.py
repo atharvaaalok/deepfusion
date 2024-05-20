@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 import numpy.typing as npt
 
 
