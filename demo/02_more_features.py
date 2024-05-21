@@ -80,3 +80,8 @@ net.set_regularization(regularizer_details)
 
 ## Training the neural network
 # With the optimizer and regularizer set we can now train the network as we did in the basic demo
+
+# We can check the time taken by each module during the forward and backward pass by setting verbose
+# = True
+net.forward(verbose = True)
+net.backward(verbose = True)
