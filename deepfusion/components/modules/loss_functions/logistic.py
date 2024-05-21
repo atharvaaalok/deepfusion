@@ -77,4 +77,4 @@ class LogisticLoss(Module):
 
         # The following is a computationally efficient way of calculating the above expression
         self.inputs[0].deriv += (1 / batch_size) * (-y * (1 - sig_t) + (1 - y) * sig_t) * self.output.deriv
-        self.inputs[1].deriv = 0
+        self.inputs[1].deriv += 0
