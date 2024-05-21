@@ -73,31 +73,35 @@ class MaxPool(Module):
     def forward(self) -> None:
         batch_size, D_in, H_in, W_in = self.inputs[0].val.shape
 
+        # Apply padding if needed
+        if self.padding > 0:
+            X = np.pad(self.inputs[0].val, pad_width = ((0, 0), (0, 0), (self.padding, self.padding), (self.padding, self.padding)))
+        else:
+            X = self.inputs[0].val
+
         # Get the output shape and define dummy output
         o = (H_in + 2 * self.padding - self.filter_size) // self.stride + 1
         maxpool = np.zeros((batch_size, D_in, o, o))
 
-        for m in range(batch_size):
-            # Get input
-            Xi = self.inputs[0].val[m]
-            for d in range(D_in):
-                # Take a depth slice of Xi
-                Xid = Xi[d, :, :]
-                # Move the filter over this depth slice
-                for i in range(o):
-                    for j in range(o):
-                        idx_i, idx_j = i * self.stride, j * self.stride
-                        # Get a patch
-                        Xid_patch = Xid[idx_i: idx_i + self.filter_size, idx_j: idx_j + self.filter_size]
-                        maxpool[m, d, i, j] = np.max(Xid_patch)
+        # Perform max pooling using vectorized operations
+        for i in range(o):
+            for j in range(o):
+                idx_i, idx_j = i * self.stride, j * self.stride
+                # Apply max pooling over this patch
+                maxpool[:, :, i, j] = np.max(X[:, :, idx_i: idx_i + self.filter_size, idx_j: idx_j + self.filter_size], axis = (2, 3))
         
-
         self.output.val = maxpool
 
 
     @override
     def backward(self) -> None:
         batch_size, D_in, H_in, W_in = self.inputs[0].val.shape
+
+        # Apply padding if needed
+        if self.padding > 0:
+            X = np.pad(self.inputs[0].val, pad_width = ((0, 0), (0, 0), (self.padding, self.padding), (self.padding, self.padding)))
+        else:
+            X = self.inputs[0].val
 
         # Get output derivative
         out_deriv = self.output.deriv
@@ -106,26 +110,24 @@ class MaxPool(Module):
         o = (H_in + 2 * self.padding - self.filter_size) // self.stride + 1
 
         # Create dummy input derivative
-        in_deriv = np.zeros((batch_size, D_in, H_in, W_in))
+        in_deriv = np.zeros(X.shape)
 
-        # Move the filters and set the values for input derivative
-        for m in range(batch_size):
-            # Get input
-            Xi = self.inputs[0].val[m]
-            for d in range(D_in):
-                # Take a depth slice of Xi
-                Xid = Xi[d, :, :]
-                # Move the filter over this depth slice
-                for i in range(o):
-                    for j in range(o):
-                        idx_i, idx_j = i * self.stride, j * self.stride
-                        # Get a patch
-                        Xid_patch = Xid[idx_i: idx_i + self.filter_size, idx_j: idx_j + self.filter_size]
-                        max_idx = np.argwhere(Xid_patch == np.max(Xid_patch))
-                        i_max, j_max = max_idx[0]
+        # Perform backpropagation using vectorized operations
+        for i in range(o):
+            for j in range(o):
+                idx_i, idx_j = i * self.stride, j * self.stride
+                # Get a depth patch
+                X_patch = X[:, :, idx_i: idx_i + self.filter_size, idx_j: idx_j + self.filter_size]
+                max_X_patch = np.max(X_patch, axis = (2, 3), keepdims = True)
+                # Get derivative mask
+                mask = (X_patch == max_X_patch)
+                # Set input derivative
+                in_deriv[:, :, idx_i: idx_i + self.filter_size, idx_j: idx_j + self.filter_size] += mask * out_deriv[:, :, i, j][:, :, None, None]
+        
 
-                        # Set the derivative at max location to output derivative value
-                        in_deriv[m, d, idx_i + i_max, idx_j + j_max] = out_deriv[m, d, i, j]
+        # Remove the derivatives of the padded portions of the input
+        if self.padding > 0:
+            in_deriv = in_deriv[:, :, self.padding:-self.padding, self.padding: -self.padding]
         
-        
+
         self.inputs[0].deriv += in_deriv
