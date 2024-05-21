@@ -68,4 +68,4 @@ class CrossEntropyLoss(Module):
         y = self.inputs[1].val
 
         self.inputs[0].deriv += (1 / batch_size) * (self.cache['softmax_t'] - y) * self.output.deriv
-        self.inputs[1].deriv = 0
+        self.inputs[1].deriv += 0
