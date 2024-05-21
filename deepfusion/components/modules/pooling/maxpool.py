@@ -49,8 +49,8 @@ class MaxPool(Module):
         """Initializes the MaxPool module based on ID, inputs and output."""
 
         # Get input and output dimensions
-        D_in, H_in, W_in = inputs[0].shape
-        D_out, H_out, W_out = output.shape
+        D_in, H_in, W_in = inputs[0].shape[-3:]
+        D_out, H_out, W_out = output.shape[-3:]
 
         # Go through checks first
         assert D_in == D_out, 'MaxPool output depth should be same as input depth.'
