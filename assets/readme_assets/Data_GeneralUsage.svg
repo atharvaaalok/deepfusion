@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg9"
+   width="348.66666"
+   height="193.33333"
+   viewBox="0 0 348.66666 193.33333"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs13" />
+  <g
+     id="g17"
+     transform="matrix(1.3333333,0,0,-1.3333333,-172.66666,246)">
+    <g
+       id="g307">
+      <path
+         d="m 130,130 h 54 V 94 h -54 z"
+         style="fill:#add8e6;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path29" />
+      <text
+         xml:space="preserve"
+         transform="scale(1,-1)"
+         style="font-variant:normal;font-weight:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text33"
+         x="144.25"
+         y="-106.57422"><tspan
+           x="144.25 153.98 159.972 162.968"
+           y="-106.57422"
+           id="tspan31">Relu</tspan></text>
+      <path
+         d="m 274,112 c 0,-9.941 -12.09,-18 -27,-18 -14.91,0 -27,8.059 -27,18 0,9.941 12.09,18 27,18 14.91,0 27,-8.059 27,-18"
+         style="fill:#add8e6;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path39" />
+      <text
+         xml:space="preserve"
+         transform="scale(1,-1)"
+         style="font-variant:normal;font-weight:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text43"
+         x="243.625"
+         y="-106.57422"><tspan
+           x="243.625"
+           y="-106.57422"
+           id="tspan41">x</tspan></text>
+      <path
+         d="m 184.402,112 c 7.485,0 15.782,0 23.797,0"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path45" />
+      <path
+         d="m 208.102,115.5 10,-3.5 -10,-3.5 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path47" />
+      <path
+         d="M 320.5,184 H 380 v -36 h -59.5 z"
+         style="fill:#f08080;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path49" />
+      <text
+         xml:space="preserve"
+         transform="scale(1,-1)"
+         style="font-variant:normal;font-weight:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text53"
+         x="328.5"
+         y="-160.57422"><tspan
+           x="328.5 340.49799 346.48999 350.228 362.22601 368.974"
+           y="-160.57422"
+           id="tspan51">MatMul</tspan></text>
+      <path
+         d="m 268.488,122.926 c 11.996,6.398 27.543,14.691 41.789,22.289"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path55" />
+      <path
+         d="m 308.543,148.258 10.473,1.617 -7.176,-7.793 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path57" />
+      <path
+         d="m 310,130 h 80.5 V 94 H 310 Z"
+         style="fill:#f08080;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path59" />
+      <text
+         xml:space="preserve"
+         transform="scale(1,-1)"
+         style="font-variant:normal;font-weight:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text63"
+         x="318"
+         y="-106.57422"><tspan
+           x="318 326.98801 332.98001 336.71799 343.452 350.20001 359.944 367.448 371.94202"
+           y="-106.57422"
+           id="tspan61">BatchNorm</tspan></text>
+      <path
+         d="m 274.34,112 c 7.41,0 15.734,0 24.062,0"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path65" />
+      <path
+         d="m 298.168,115.5 10,-3.5 -10,-3.5 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path67" />
+      <path
+         d="m 318.625,76 h 63.25 V 40 h -63.25 z"
+         style="fill:#add8e6;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path69" />
+      <text
+         xml:space="preserve"
+         transform="scale(1,-1)"
+         style="font-variant:normal;font-weight:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text73"
+         x="326.625"
+         y="-52.574219"><tspan
+           x="326.625 336.36899 340.87701 348.367 355.871 363.375 370.12299"
+           y="-52.574219"
+           id="tspan71">Dropout</tspan></text>
+      <path
+         d="M 268.488,101.074 C 280.02,94.922 294.832,87.023 308.613,79.672"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path75" />
+      <path
+         d="m 309.895,82.957 7.175,-7.797 -10.468,1.617 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path77" />
+    </g>
+  </g>
+</svg>

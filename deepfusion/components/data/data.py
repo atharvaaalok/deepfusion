@@ -145,6 +145,7 @@ class Data:
     
 
     def __str__(self):
+        """Returns a string representation of the Data object based on current attribute values."""
         print_input = self.input.ID if self.input is not None else None
         print_output = [ele.ID for ele in self.outputs] if len(self.outputs) > 0 else []
         print_data = (f'Data Object\n' + 40 * '-' + '\n' +
