@@ -5,9 +5,6 @@ from setuptools import find_packages, setup
 with open('README.md') as f:
     readme = f.read()
 
-# this grabs the requirements from requirements.txt, assumes that there are no comments in the file
-REQUIREMENTS = [i.strip() for i in open("requirements.txt").readlines()]
-
 
 setup(
     name = 'deepfusion',
@@ -21,7 +18,8 @@ setup(
     long_description_content_type = 'text/markdown',
     packages = find_packages(),
     python_requires = '>=3.12',
-    install_requires = REQUIREMENTS,
+    install_requires = ['numpy==1.26.4', 'matplotlib==3.8.4', 'setuptools==69.5.1'],
+    extras_require = ['graphviz==0.20.3', 'cupy_cuda12x==13.1.0'],
     keywords = ['deepfusion', 'deep learning', 'neural networks', 'artificial intelligence', 'machine learning',
                 'model', 'optimization', 'backpropagation'],
 )
