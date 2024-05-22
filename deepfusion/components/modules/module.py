@@ -173,3 +173,31 @@ class Module(ABC):
             self.optimizer_details = optimizer_details
             for parameter in self.parameter_list:
                 parameter.set_optimizer(optimizer_details)
+    
+
+    def __str__(self):
+        """Returns a string representation of the Module object based on current attribute 
+        values."""
+        print_input = [ele.ID for ele in self.inputs]
+        print_output = self.output.ID
+        print_parameter = [param.ID for param in self.parameter_list]
+        # Get attributes that may exist, if they don't set them to None
+        print_mode = getattr(self, 'mode', None)
+        print_is_regularized = getattr(self, 'is_regularized', None)
+        print_regularizer_details = getattr(self, 'regularizer_details', None)
+
+        print_module = (f'Module Object\n' + 40 * '-' + '\n' +
+                        f'ID                      : {self.ID}\n' +
+                        f'inputs                  : {print_input}\n' +
+                        f'output                  : {print_output}\n' +
+                        f'parameter_list          : {print_parameter}\n'
+                        f'is_frozen               : {self.is_frozen}\n' +
+                        f'optimizer_details       : {self.optimizer_details}\n' +
+                        f'learning_rate           : {self.learning_rate}\n' +
+                        f'different_at_train_test : {self.different_at_train_test}\n' +
+                        f'mode                    : {print_mode}\n' +
+                        f'is_regularizable        : {self.is_regularizable}\n' +
+                        f'is_regularized          : {print_is_regularized}\n' +
+                        f'regularizer_details     : {print_regularizer_details}\n')
+        
+        return print_module

@@ -39,6 +39,7 @@ loss = net.get_node('loss')
 # Print the nodes
 print(x)
 print(Matmul1.W)
+print(Matmul1)
 
 # Accessing the values of the nodes
 print('\nAccessing values of data objects\n' + 40 * '-')
