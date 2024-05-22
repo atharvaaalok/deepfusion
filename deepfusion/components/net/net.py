@@ -376,7 +376,7 @@ class Net:
             dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
             for connected_node in connected_nodes:
                 shape = 'ellipse' if isinstance(connected_node, Data) else 'rect'
-                color = 'light_blue' if connected_node.is_frozen else light_coral
+                color = light_blue if connected_node.is_frozen else light_coral
                 dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
         
         # Add edges
