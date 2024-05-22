@@ -4,7 +4,7 @@ class Backend:
     @staticmethod
     def set_backend(backend: str):
         if backend not in ['cpu', 'gpu']:
-            raise ValueError('Backend must be "CPU" or "GPU".')
+            raise ValueError('Backend must be "cpu" or "gpu".')
         
         Backend.backend = backend
     
