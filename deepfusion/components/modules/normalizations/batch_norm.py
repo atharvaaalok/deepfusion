@@ -1,4 +1,4 @@
-from typing import override
+from typing_extensions import override
 
 from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
