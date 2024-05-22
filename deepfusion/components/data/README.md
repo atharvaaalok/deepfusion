@@ -66,33 +66,33 @@ deriv          : //
 
 ## Methods
 `Data` objects have the following methods defined:
-- **`__init__(self, ID: str, shape: tuple[int, ...], val: npt.NDArray = None,
+- `__init__(self, ID: str, shape: tuple[int, ...], val: npt.NDArray = None,
   is_frozen: bool = True, optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS,
   learning_rate: float = 1e-6, is_regularized: bool = False,
-  regularizer_details: Optional[dict] = None) -> None`**:
+  regularizer_details: Optional[dict] = None) -> None`:
   Initializes the `Data` instance based on the provided ID, shape, and other optional parameters.
   Raises a `ValueError` if the data is regularized but no regularizer details are provided.
 
-- **`update(self) -> None`**:
+- `update(self) -> None`:
   Updates the value (if not frozen) using steps from the optimizer and regularizer.
 
-- **`freeze(self) -> None`**:
+- `freeze(self) -> None`**:
   Freezes the `Data` object so that updates to its value will no longer be made.
 
-- **`unfreeze(self, optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS) -> None`**:
+- `unfreeze(self, optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS) -> None`:
   Unfreezes the `Data` object to allow updates to be made to its value.
 
-- **`clear_grads(self) -> None`**:
+- `clear_grads(self) -> None`:
   Sets the `deriv` attribute to zero.
 
-- **`set_regularization(self, regularizer_details: dict) -> None`**:
+- `set_regularization(self, regularizer_details: dict) -> None`:
   Regularizes the data using specified regularization strength and function.
 
-- **`set_learning_rate(self, learning_rate: float) -> None`**:
+- `set_learning_rate(self, learning_rate: float) -> None`:
   Sets the learning rate for the `Data` object.
 
-- **`set_optimizer(self, optimizer_details: dict) -> None`**:
+- `set_optimizer(self, optimizer_details: dict) -> None`:
   Sets an optimizer for the `Data` object that can be used to update the value.
 
-- **`__str__(self) -> str`**:
+- `__str__(self) -> str`:
   Returns a string representation of the `Data` object based on current attribute values.
