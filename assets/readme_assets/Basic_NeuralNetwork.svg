@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="876pt" height="170pt" viewBox="0 0 876 170">
+<g>
+<path transform="matrix(1,0,0,-1,0,170)" d="M94 112C94 102.059 81.91 94 67 94 52.09 94 40 102.059 40 112 40 121.941 52.09 130 67 130 81.91 130 94 121.941 94 112" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M94 112C94 102.059 81.91 94 67 94 52.09 94 40 102.059 40 112 40 121.941 52.09 130 67 130 81.91 130 94 121.941 94 112"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="63.625">x</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" d="M130 130H194.75V94H130Z" fill="#f08080"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M130 130H194.75V94H130Z"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="138 149.998 155.98999 159.728 170.214 176.962 179.94402">Matmul1</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M94.012 112C101.492 112 109.863 112 118.09 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M118.008 115.5 128.008 112 118.008 108.5ZM118.008 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M118.008 115.5 128.008 112 118.008 108.5ZM118.008 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M284.75 112C284.75 102.059 272.66 94 257.75 94 242.84 94 230.75 102.059 230.75 112 230.75 121.941 242.84 130 257.75 130 272.66 130 284.75 121.941 284.75 112" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M284.75 112C284.75 102.059 272.66 94 257.75 94 242.84 94 230.75 102.059 230.75 112 230.75 121.941 242.84 130 257.75 130 272.66 130 284.75 121.941 284.75 112"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="251.375 257.367">z1</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M195.25 112C202.828 112 210.984 112 218.805 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M218.781 115.5 228.781 112 218.781 108.5ZM218.781 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M218.781 115.5 228.781 112 218.781 108.5ZM218.781 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M320.75 130H374.75V94H320.75Z" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M320.75 130H374.75V94H320.75Z"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="333.5 343.244 349.99198 353.72996">ActF</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M285.152 112C292.637 112 300.934 112 308.949 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M308.852 115.5 318.852 112 308.852 108.5ZM308.852 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M308.852 115.5 318.852 112 308.852 108.5ZM308.852 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M464.75 112C464.75 102.059 452.66 94 437.75 94 422.84 94 410.75 102.059 410.75 112 410.75 121.941 422.84 130 437.75 130 452.66 130 464.75 121.941 464.75 112" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M464.75 112C464.75 102.059 452.66 94 437.75 94 422.84 94 410.75 102.059 410.75 112 410.75 121.941 422.84 130 437.75 130 452.66 130 464.75 121.941 464.75 112"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="434.75">a</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M375.152 112C382.637 112 390.934 112 398.949 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M398.852 115.5 408.852 112 398.852 108.5ZM398.852 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M398.852 115.5 408.852 112 398.852 108.5ZM398.852 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M500.75 130H565.5V94H500.75Z" fill="#f08080"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M500.75 130H565.5V94H500.75Z"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="508.75 520.748 526.74 530.47799 540.9639 547.7119 550.6939">Matmul2</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M464.762 112C472.242 112 480.613 112 488.84 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M488.758 115.5 498.758 112 488.758 108.5ZM488.758 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M488.758 115.5 498.758 112 488.758 108.5ZM488.758 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M655.5 112C655.5 102.059 643.41 94 628.5 94 613.59 94 601.5 102.059 601.5 112 601.5 121.941 613.59 130 628.5 130 643.41 130 655.5 121.941 655.5 112" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M655.5 112C655.5 102.059 643.41 94 628.5 94 613.59 94 601.5 102.059 601.5 112 601.5 121.941 613.59 130 628.5 130 643.41 130 655.5 121.941 655.5 112"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-106.57422" x="622.125 628.117">z2</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M566 112C573.578 112 581.734 112 589.555 112"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M589.531 115.5 599.531 112 589.531 108.5ZM589.531 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M589.531 115.5 599.531 112 589.531 108.5ZM589.531 115.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M691.5 103H745.5V67H691.5Z" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M691.5 103H745.5V67H691.5Z"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-79.57422" x="700.5 708.732 716.236 722.242 728.234">LossF</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M653.547 104.621C661.797 102.09 671.23 99.195 680.277 96.422"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M681.027 99.852 689.563 93.574 678.973 93.16ZM681.027 99.852"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M681.027 99.852 689.563 93.574 678.973 93.16ZM681.027 99.852"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M835.5 85C835.5 75.059 823.41 67 808.5 67 793.59 67 781.5 75.059 781.5 85 781.5 94.941 793.59 103 808.5 103 823.41 103 835.5 94.941 835.5 85" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M835.5 85C835.5 75.059 823.41 67 808.5 67 793.59 67 781.5 75.059 781.5 85 781.5 94.941 793.59 103 808.5 103 823.41 103 835.5 94.941 835.5 85"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-79.57422" x="797.25 800.232 807.736 813.742">loss</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M745.902 85C753.387 85 761.684 85 769.699 85"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M769.602 88.5 779.602 85 769.602 81.5ZM769.602 88.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M769.602 88.5 779.602 85 769.602 81.5ZM769.602 88.5"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M655.5 58C655.5 48.059 643.41 40 628.5 40 613.59 40 601.5 48.059 601.5 58 601.5 67.941 613.59 76 628.5 76 643.41 76 655.5 67.941 655.5 58" fill="#add8e6"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M655.5 58C655.5 48.059 643.41 40 628.5 40 613.59 40 601.5 48.059 601.5 58 601.5 67.941 613.59 76 628.5 76 643.41 76 655.5 67.941 655.5 58"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 170)" font-size="14" font-family="TimesNewRomanPSMT"><tspan y="-52.57422" x="625.125">y</tspan></text>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M653.547 65.379C661.797 67.91 671.23 70.805 680.277 73.578"/>
+<path transform="matrix(1,0,0,-1,0,170)" d="M678.973 76.84 689.563 76.426 681.027 70.148ZM678.973 76.84"/>
+<path transform="matrix(1,0,0,-1,0,170)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M678.973 76.84 689.563 76.426 681.027 70.148ZM678.973 76.84"/>
+</g>
+</svg>
