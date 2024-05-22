@@ -85,3 +85,12 @@ net.set_regularization(regularizer_details)
 # = True
 net.forward(verbose = True)
 net.backward(verbose = True)
+
+
+## Training specific parts
+# Free the network and visualize
+net.freeze()
+net.visualize('Frozen_net')
+
+x.unfreeze()
+net.visualize('Unfrozen_input')
