@@ -2,7 +2,12 @@ from typing import Optional
 import time
 import pickle
 
-from graphviz import Source
+# Import graphviz if available - optional dependency
+try:
+    from graphviz import Source
+    has_graphviz = True
+except ImportError:
+    has_graphviz = False
 
 from deepfusion.utils.backend import Backend
 np = Backend.get_array_module()
@@ -344,6 +349,11 @@ class Net:
 
     def visualize(self, filename = 'Visualization', orientation = 'LR') -> None:
         """Draws a graph to visualize the network."""
+
+        if not has_graphviz:
+            raise ValueError('graphviz package is required for visualization. '\
+                             'Install graphviz first. Refer installation guide at '
+                              'https://github.com/atharvaaalok/deepfusion')
 
         available_orientations = ['LR', 'RL', 'BT', 'TB']
         if orientation not in available_orientations:
