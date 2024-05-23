@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 # Read contents of readme.md to use as long description later
-with open('README.md') as f:
+with open('README.md', 'r', encoding = 'utf-8') as f:
     readme = f.read()
 
 

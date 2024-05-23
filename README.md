@@ -1,9 +1,9 @@
 <div align="center">
     <picture>
-        <source media="(prefers-color-scheme: light)" srcset="./assets/logos/Light_TextRight.svg">
-        <source media="(prefers-color-scheme: dark)" srcset="./assets/logos/Dark_TextRight.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/logos/Light_TextRight.svg">
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/logos/Dark_TextRight.svg">
         <img alt="DeepFusion Logo with text below it. Displays the light version in light mode and
-        the dark version logo in dark mode." src="./assets/logos/Light_TextRight.svg" width="100%">
+        the dark version logo in dark mode." src="https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/logos/Light_TextRight.svg" width="100%">
     </picture>
 </div>
 
@@ -46,7 +46,7 @@ the forward and backward passes.
 
 A simple neural network is shown below, where, ellipses represent `Data` objects and rectangles
 represent `Module`.
-![Basic Neural Network](./assets/readme_assets/Basic_NeuralNetwork.svg)
+![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NeuralNetwork.svg)
 
 > Note the alternating sequence of `Data` and `Module`. The scheme is `Data` -> `Module` -> `Data`.
 > Red represents nodes with updatable parameters.
@@ -138,7 +138,7 @@ To have a look at the codebase tree have a look at [Codebase Tree](./assets/code
 ## Highlights
 ### 1. Customizable training
 Let's say we make the simple neural network as before
-![Basic Neural Network](./assets/readme_assets/Basic_NeuralNetwork.svg)
+![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NeuralNetwork.svg)
 And train it. During training only the *red* portions of the network receive updates and are
 trained. Therefore, the matrix multiplication modules will be trained.
 
@@ -150,7 +150,7 @@ net.freeze() # Freezes all modules
 x.unfreeze() # Unfreezes the input node
 ```
 After this we obtain the following network:
-![Basic Neural Network](./assets/readme_assets/Basic_NN_unfrozen_input.svg)
+![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NN_unfrozen_input.svg)
 Now when we train the network only the input node value will get updates and be trained!
 
 ### 2. Gradient Checking
