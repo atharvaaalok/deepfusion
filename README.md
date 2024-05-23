@@ -46,6 +46,7 @@ the forward and backward passes.
 
 A simple neural network is shown below, where, ellipses represent `Data` objects and rectangles
 represent `Module`.
+
 ![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NeuralNetwork.svg)
 
 > Note the alternating sequence of `Data` and `Module`. The scheme is `Data` -> `Module` -> `Data`.
@@ -137,7 +138,8 @@ To have a look at the codebase tree have a look at [Codebase Tree](./assets/code
 
 ## Highlights
 ### 1. Customizable training
-Let's say we make the simple neural network as before
+Let's say we make the simple neural network as before:
+
 ![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NeuralNetwork.svg)
 And train it. During training only the *red* portions of the network receive updates and are
 trained. Therefore, the matrix multiplication modules will be trained.
@@ -150,6 +152,7 @@ net.freeze() # Freezes all modules
 x.unfreeze() # Unfreezes the input node
 ```
 After this we obtain the following network:
+
 ![Basic Neural Network](https://raw.githubusercontent.com/atharvaaalok/deepfusion/main/assets/readme_assets/Basic_NN_unfrozen_input.svg)
 Now when we train the network only the input node value will get updates and be trained!
 
