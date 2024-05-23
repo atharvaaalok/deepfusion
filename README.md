@@ -1,9 +1,9 @@
 <div align="center">
     <picture>
         <source media="(prefers-color-scheme: light)" srcset="./assets/logos/Light_TextRight.svg">
-        <source media="(prefers-color-scheme: dark)" srcset="./assets/logos/Dark_TextBelow.svg">
+        <source media="(prefers-color-scheme: dark)" srcset="./assets/logos/Dark_TextRight.svg">
         <img alt="DeepFusion Logo with text below it. Displays the light version in light mode and
-        the dark version logo in dark mode." src="./assets/logos/Light_TextBelow.svg" width="100%">
+        the dark version logo in dark mode." src="./assets/logos/Light_TextRight.svg" width="100%">
     </picture>
 </div>
 
