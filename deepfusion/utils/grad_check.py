@@ -79,7 +79,7 @@ def gradient_checker(net: Net, data_obj: Data, h: float = 1e-6) -> None:
     rel_error[idx] = 0
     epsilon = 1e-8
     rel_error[~idx] = (np.abs(analytic_grad[~idx] - numeric_grad[~idx]) /
-                          np.maximum(epsilon, np.abs(analytic_grad[~idx]) + np.abs(numeric_grad[~idx])))
+                      np.maximum(epsilon, np.abs(analytic_grad[~idx]) + np.abs(numeric_grad[~idx])))
     
     print(f'{green}Gradient checking w.r.t. {data_obj.ID}\n' + 40 * '-', f'{color_end}')
     # Print gradients and errors

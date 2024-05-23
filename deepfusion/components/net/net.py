@@ -354,7 +354,8 @@ class Net:
 
         available_orientations = ['LR', 'RL', 'BT', 'TB']
         if orientation not in available_orientations:
-            raise ValueError(f'Specified orientation not available. Choose from - {available_orientations}')
+            raise ValueError(f'Specified orientation not available.' \
+                             f' Choose from - {available_orientations}')
 
         dag = self.graph
 
@@ -370,11 +371,13 @@ class Net:
             # Use ellipse to represent Data nodes and rectangles for Modules
             shape = 'ellipse' if isinstance(node, Data) else 'rect'
             color = light_blue if node.is_frozen else light_coral
-            dot_string += f'    {node.ID} [label="{node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
+            dot_string += (f'    {node.ID} [label="{node.ID}", shape = "{shape}",' \
+                           f' style = "filled", fillcolor = "{color}"];\n')
             for connected_node in connected_nodes:
                 shape = 'ellipse' if isinstance(connected_node, Data) else 'rect'
                 color = light_blue if connected_node.is_frozen else light_coral
-                dot_string += f'    {connected_node.ID} [label="{connected_node.ID}", shape = "{shape}", style = "filled", fillcolor = "{color}"];\n'
+                dot_string += (f'    {connected_node.ID} [label="{connected_node.ID}",' \
+                               f' shape = "{shape}", style = "filled", fillcolor = "{color}"];\n')
         
         # Add edges
         for node, connected_nodes in dag.items():
