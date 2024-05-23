@@ -10,7 +10,7 @@ setup(
     name = 'deepfusion',
     author = 'Atharva Aalok',
     author_email = 'atharvaaalok@gmail.com',
-    version = '0.0.2',
+    version = '0.0.3',
     url = 'https://github.com/atharvaaalok/deepfusion',
     license = 'MIT',
     description = 'DeepFusion is a highly modular and customizable deep learning framework!',
