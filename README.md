@@ -132,6 +132,8 @@ net = Net(ID = 'Net', root_nodes = [loss])
 Examples introducing the basics and all features of the library can be found in the [demo](./demo/)
 directory or in other [resources](#resources).
 
+To have a look at the codebase tree have a look at [Codebase Tree](./assets/codebase_tree.txt).
+
 
 ## Highlights
 ### 1. Customizable training
