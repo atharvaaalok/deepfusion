@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Optional, Union
+from typing_extensions import Self
 import time
 import pickle
 
@@ -67,7 +68,6 @@ class Net:
         """Initializes a Net based on ID, list of root nodes and other optional parameters."""
         
         self.ID = ID
-        
         self.root_nodes = root_nodes
 
         self.graph = {}
@@ -76,7 +76,6 @@ class Net:
         self.node_lookup = {}
 
         self.learning_rate = learning_rate
-
         self.is_frozen = False
         self.optimizer_details = optimizer_details if not self.is_frozen else None
 
@@ -85,6 +84,7 @@ class Net:
 
         self.mode = 'train'
         
+        # Set topological order, graph dictionary and node look up attributes
         self.run_setup()
     
 
@@ -110,8 +110,7 @@ class Net:
         def _topological_sort_util(node):
             if node not in visited_nodes:
                 visited_nodes.add(node)
-                if isinstance(node, Data):
-                    if node.input is not None:
+                if isinstance(node, Data) and node.input is not None:
                         _topological_sort_util(node.input)
                 elif isinstance(node, Module):
                     for child_node in node.inputs:
@@ -144,7 +143,7 @@ class Net:
             self.node_lookup[node.ID] = node
     
 
-    def get_node(self, ID: str) -> None:
+    def get_node(self, ID: str) -> Union[Data, Module]:
         """Return handle to the node corresponding to a particular ID."""
         return self.node_lookup.get(ID, 'Node with specified ID is not available.')
     
@@ -171,14 +170,14 @@ class Net:
     
 
     def set_initial_deriv(self):
-        # Set derivative to a zero array of the batch size shape for backward pass to work with +=
+        """Reset the Data object derivatives to a zero array of the batch size shape for backward
+        pass to work with +=."""
         batch_size = self.topological_order[0].val.shape[0]
         for node in self.topological_order:
             # Set derivative for data nodes, parameters inside modules already have right dimensions
-            if isinstance(node, Data):
-                # Set derivative only if the batch_size is not accounted for
-                if node.deriv.shape[0] != batch_size:
-                    node.deriv = np.zeros((batch_size,) + node.shape[1:])
+            # Also set derivative only if the batch_size is not accounted for
+            if isinstance(node, Data) and node.deriv.shape[0] != batch_size:
+                node.deriv = np.zeros((batch_size,) + node.shape[1:])
     
 
     def forward(self, verbose = False) -> None:
@@ -241,7 +240,7 @@ class Net:
     
 
     def forward_from_node(self, node: Data) -> None:
-        """Runs the forward method starting from a particular node of each module afterwards in
+        """Runs the forward method starting from a particular node for each module afterwards in
         topological order.
         
         Args:
@@ -323,9 +322,8 @@ class Net:
         self.regularizer_details = regularizer_details
 
         for node in self.topological_order:
-            if isinstance(node, Module):
-                if node.is_regularizable:
-                    node.set_regularization(regularizer_details)
+            if isinstance(node, Module) and node.is_regularizable:
+                node.set_regularization(regularizer_details)
 
 
     def set_mode(self, mode: str) -> None:
@@ -342,9 +340,8 @@ class Net:
 
         self.mode = mode
         for node in self.topological_order:
-            if isinstance(node, Module):
-                if node.different_at_train_test:
-                    node.set_mode(mode)
+            if isinstance(node, Module) and node.different_at_train_test:
+                node.set_mode(mode)
     
 
     def visualize(self, filename = 'Visualization', orientation = 'LR') -> None:
@@ -393,7 +390,8 @@ class Net:
     
 
     def save(self, file_path: str) -> None:
-        file_path = Net._ensure_extension(file_path)
+        """Save the module object with .df file extension."""
+        file_path = self._ensure_extension(file_path)
         
         # Save the model using pickle
         with open(file_path, 'wb') as f:
@@ -401,7 +399,8 @@ class Net:
     
 
     @staticmethod
-    def load(file_path: str) -> None:
+    def load(file_path: str) -> Self:
+        """Load a saved network from file."""
         file_path = Net._ensure_extension(file_path)
         
         # Save the model using pickle
@@ -412,15 +411,14 @@ class Net:
     
     
     @staticmethod
-    def _ensure_extension(file_path: str) -> None:
-        # Check if the .df extension is already present, if not, then add it
-        if not file_path.endswith('.df'):
-            file_path += '.df'
-        
-        return file_path
+    def _ensure_extension(file_path: str) -> str:
+        """Checks if the .df extension is already present, if not, then adds it."""
+        return file_path if file_path.endswith('.df') else f'{file_path}.df'
 
 
     def connect(self, root_nodes: list[Data]) -> None:
+        """Reinitializes the network topological order based on the newly connected nodes and
+        modules to the network."""
         self.root_nodes = root_nodes
 
         # Clear graphs and topological order
@@ -461,13 +459,18 @@ class Net:
         self.create_lookup()
     
 
-    def share_parameters(self, modules: list[Module]):
+    def share_parameters(self, modules: list[Module]) -> None:
+        """Shares parameters across the modules. Sets the val and deriv attributes of all data
+        objects to share the same memory.
         
+        Raises:
+            TypeError: If all modules are not of the same type.
+        """
         # First verify that all modules are of the same type
+        if not all(isinstance(module, type(modules[0])) for module in modules):
+            raise TypeError('All modules must be of the same type to share parameters.')
+        
         module1 = modules[0]
-        for module in modules[1:]:
-            if not isinstance(module, type(module1)):
-                raise TypeError(f'Module {module.ID} is not of same type as {module1.ID} (type: {type(module1).__name__}).')
         
         # Share parameters across the modules
         for module in modules[1:]:
