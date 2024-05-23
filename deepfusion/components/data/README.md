@@ -76,7 +76,7 @@ deriv          : //
 - `update(self) -> None`:
   Updates the value (if not frozen) using steps from the optimizer and regularizer.
 
-- `freeze(self) -> None`**:
+- `freeze(self) -> None`:
   Freezes the `Data` object so that updates to its value will no longer be made.
 
 - `unfreeze(self, optimizer_details: dict = DEFAULT_OPTIMIZER_DETAILS) -> None`:
