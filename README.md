@@ -209,7 +209,7 @@ pip install deepfusion[gpu,visualization]
 ## Resources
 - [DeepFusion documentation]()
 - [DeepFusion demo](./demo/)
-- [DeepFusion Tutorials]()
+- [DeepFusion Tutorials](https://github.com/atharvaaalok/deepfusion-examples)
 
 
 ## Contribution Guidelines
